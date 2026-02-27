@@ -1,0 +1,33 @@
+{
+  "neo4j": {
+    "uri": "bolt://localhost:7687",
+    "username": "neo4j",
+    "password": "neo4j123"
+  },
+  "processing": {
+    "clearDatabase": true,
+    "importNetlist": true,
+    "importAST": true,
+    "importDFG": true,
+    "alignDFGToAST": true,
+    "dfgMaxNodesPerFile": 5000,
+    "dfgIncludeTempNodes": true
+  },
+  "yosys": {
+    "workDir": "./output"
+  },
+  "batchProcessing": {
+    "enabled": false,
+    "listFile": "verilog_files.txt",
+    "parallel": false
+  },
+  "embeddings": {
+    "enabled": true,
+    "provider": "local",
+    "model": "nomic-embed-text:latest",
+    "apiKey": null,
+    "apiUrl": "http://localhost:11434/api/embeddings",
+    "dimension": 768,
+    "batchSize": 10
+  }
+}

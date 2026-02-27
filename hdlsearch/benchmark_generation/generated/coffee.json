@@ -1,0 +1,374 @@
+[
+  {
+    "module_id": "Coffee",
+    "block_descriptions": [
+      {
+        "code": "Data_path    U0(\n.Data_path_clock(Coffee_Clock),\n.Data_path_rst_n(Cnt_clr),\n.Data_path_sel_en(sel_en),\n.Data_path_sel_sel(sel_sel),\n.Data_path_cnt_ld(Cnt_ld),\n.Data_path_cnt_en(Cnt_en),\n.Data_path_cnt_ud(Cnt_ud),\n.Data_path_com_Less_3(Less_3),\n.Data_path_com_Eql_3(Eql_3),\n.Data_path_com_Grt_3(Grt_3),\n.Data1(Coffee_Data1)\n);\n\n//实例化控制单元\n",
+        "description": "This code instantiates a data path module that handles various control and data signals. It includes a clock input, reset signal, and several control flags for enabling, loading, and updating the data path. The module also processes comparison results, such as less than, equal to, and greater than conditions. The data path is responsible for managing data flow and performing operations based on the control signals and comparison outcomes."
+      },
+      {
+        "code": "Control_unit U1(\n.Clock(Coffee_Clock),\n.Reset_n(Coffee_Reset_n),\n.Coin_1(Coffee_Coin_1),\n.Coin_5(Coffee_Coin_5),\n.Cup_rdy(Coffee_Cup_rdy),\n.Cof_rdy(Coffee_Cof_rdy),\n.Place_cup(Coffee_Place_cup),\n.Inject_cof(Coffee_Inject_cof),\n.Less_3(Less_3),\n.Eql_3(Eql_3),\n.Grt_3(Grt_3),\n.sel_en(sel_en),\n.sel_sel(sel_sel),\n.Cnt_clr(Cnt_clr),\n.Cnt_en(Cnt_en),\n.Cnt_ld(Cnt_ld),\n.Cnt_ud(Cnt_ud),\n.LCD_EN(Coffee_LCD_EN),\n.LCD_RW(Coffee_LCD_RW),\n.LCD_RS(Coffee_LCD_RS),\n.LCD_DATA(Coffee_LCD_DATA),\n.Refund(Coffee_Refund),\n.Coin_return(Coffee_Coin_return)\n);\n\nendmodule ",
+        "description": "This code defines a control unit for a coffee machine. It manages the state and control signals for the machine's operations. The control unit processes inputs like coin insertion and cup readiness, and it generates outputs to control actions such as placing a cup, injecting coffee, and managing the display. It also handles conditions related to the amount of money inserted, enabling or disabling certain functions based on these conditions. Additionally, it controls the display and manages refunds or coin returns when necessary."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "Coffee::Coffee_LCD_RS",
+        "description": "Acts as a control signal to manage the display function in the coffee machine. This signal determines whether the data being sent to the display is an instruction or actual data to be shown. It is part of the broader set of signals that handle the user interface, ensuring that the correct information is displayed based on the current state and operations of the machine."
+      },
+      {
+        "signal": "Coffee::Coffee_Inject_cof",
+        "description": "Acts as a control signal to initiate the coffee injection process. It is asserted when the machine has detected that a cup is in place and the correct amount of money has been inserted. This signal triggers the mechanism to dispense coffee into the cup, ensuring that the action only occurs under the appropriate conditions."
+      },
+      {
+        "signal": "Coffee::Cnt_ud",
+        "description": "Serves as a control signal to manage the increment or decrement operation within the data path. This signal is used to adjust the count value based on the operational requirements, such as adding or subtracting from the current state. It is part of a larger system that processes inputs and controls various actions in a coffee machine, including handling coin insertions, managing the display, and performing operations like placing a cup or injecting coffee. The control signal ensures that the count is updated correctly to reflect the current state and conditions."
+      },
+      {
+        "signal": "Coffee::Coffee_Coin_5",
+        "description": "Acts as a data path to indicate the insertion of a specific type of coin. This signal is used to update the internal state of the control unit, which then determines the appropriate action based on the total amount of money inserted. It influences the logic by enabling or disabling certain functions and potentially triggering events such as dispensing a product or returning change."
+      },
+      {
+        "signal": "Coffee::Grt_3",
+        "description": "Acts as a state flag to indicate when the amount of money inserted into the coffee machine exceeds a specific threshold. This flag influences the control logic by enabling or disabling certain operations, such as injecting coffee or managing refunds, based on the comparison outcome. The flag is used in both the data path and control unit to synchronize and coordinate the machine's actions according to the current state and input conditions."
+      },
+      {
+        "signal": "Coffee::Coffee_Refund",
+        "description": "Acts as a control signal to initiate the refund process in the coffee machine. It is activated when the conditions for a refund are met, such as an overpayment or a malfunction. This signal triggers the return of coins to the user, ensuring that any excess payment is refunded appropriately."
+      },
+      {
+        "signal": "Coffee::sel_en",
+        "description": "Acts as a control signal to manage the selection and enabling of specific data paths within the coffee machine's control unit. This signal is used to coordinate the flow of data and operations, such as processing coin inputs, checking cup readiness, and controlling the display. When asserted, it allows the system to perform specific actions based on the current state and input conditions, ensuring that the correct operations are enabled at the right time."
+      },
+      {
+        "signal": "Coffee::Coffee_Cup_rdy",
+        "description": "Acts as a state flag to indicate the readiness of the cup in the coffee machine. This flag is used to synchronize the machine's operations, ensuring that the next steps, such as placing the cup or injecting coffee, only proceed when a cup is properly positioned. The control unit monitors this flag along with other inputs to manage the sequence of actions and maintain the correct operational flow."
+      },
+      {
+        "signal": "Coffee::sel_sel",
+        "description": "Acts as a control signal to manage the selection within the data path. It is used to determine which specific operation or data flow should be enabled based on the current state and input conditions. This control signal works in conjunction with other control flags to coordinate the overall functionality of the coffee machine, ensuring that the correct actions are taken at the appropriate times, such as processing coin inputs, managing cup readiness, and controlling the display."
+      },
+      {
+        "signal": "Coffee::Coffee_LCD_RW",
+        "description": "Acts as a control signal for the display unit, managing read and write operations on the display. It is used to coordinate the direction of data flow between the control unit and the display, ensuring that data is either written to or read from the display correctly. This signal is essential for updating the display with the current state of the coffee machine, such as the amount of money inserted or the readiness of the coffee."
+      },
+      {
+        "signal": "Coffee::Coffee_Cof_rdy",
+        "description": "Acts as a state flag to indicate the readiness of coffee in the machine. It is used to trigger the next steps in the process, such as injecting coffee into a cup, once the coffee is ready. This flag helps in synchronizing the operations and ensuring that the machine only proceeds with the next action when the coffee is properly prepared."
+      },
+      {
+        "signal": "Coffee::Coffee_Reset_n",
+        "description": "Acts as a control signal to initialize or reset the control unit of the coffee machine. This signal is used to bring the system to a known initial state, typically when the machine is powered on or needs to be reset. It ensures that all internal states and control signals are set to their default values, preparing the machine for a new operational cycle."
+      },
+      {
+        "signal": "Coffee::Coffee_Coin_1",
+        "description": "Acts as a data path to indicate the insertion of a specific type of coin. This signal is used to update the internal state of the control unit, which then decides on further actions such as enabling or disabling certain machine functions based on the total amount of money inserted. It helps in triggering events like placing a cup or injecting coffee when the required conditions are met."
+      },
+      {
+        "signal": "Coffee::Coffee_LCD_DATA",
+        "description": "Acts as a data path to transfer information to the display. It carries the data that needs to be shown on the LCD, such as operational status or instructions for the user. This data register is essential for updating the display with relevant information during the coffee machine's operation, ensuring that the user is informed about the current state and any required actions."
+      },
+      {
+        "signal": "Coffee::Cnt_en",
+        "description": "Acts as a control signal to manage the enablement of a counter within the data path. This control signal is used to activate or deactivate the counting process based on the current state and conditions of the system, such as the amount of money inserted and the readiness of the cup. When asserted, it allows the counter to increment or decrement, facilitating the tracking of operations and ensuring that the correct actions are taken in the coffee machine's workflow."
+      },
+      {
+        "signal": "Coffee::Coffee_Data1",
+        "description": "Acts as a data register to store and manage data within the data path. It is used to hold and transfer data based on control signals and comparison results, ensuring that data is processed and propagated correctly according to the specified conditions."
+      },
+      {
+        "signal": "Coffee::Coffee_Coin_return",
+        "description": "Acts as a control signal to manage the return of coins in the coffee machine. It is asserted when the system needs to return coins to the user, typically in scenarios where the transaction is canceled or the inserted amount exceeds the required price. This signal helps in coordinating the mechanical and logical processes to ensure that the correct amount is returned to the user."
+      },
+      {
+        "signal": "Coffee::Cnt_ld",
+        "description": "Acts as a control signal to load data into a specific register within the data path. This signal is used to initiate the loading of new data, typically in response to certain conditions being met, such as valid input or a state change. It ensures that the data path is updated with the latest information, which is crucial for the proper functioning and synchronization of the coffee machine's operations."
+      },
+      {
+        "signal": "Coffee::Coffee_Clock",
+        "description": "Serves as a clock signal to synchronize the operations of both the data path and control unit. It ensures that all state transitions and data manipulations occur in a coordinated manner, maintaining the correct timing for the coffee machine's processes. The clock signal is essential for the proper functioning of the system, enabling the control unit to manage inputs and outputs while the data path handles the internal data flow and operations."
+      },
+      {
+        "signal": "Coffee::Eql_3",
+        "description": "Acts as a state flag to indicate when a specific condition is met, such as the exact amount of money inserted. This flag influences the control logic by enabling or disabling certain operations based on the condition. When the condition is true, it triggers actions like placing a cup or injecting coffee, and it also affects the display and refund mechanisms."
+      },
+      {
+        "signal": "Coffee::Less_3",
+        "description": "Acts as a state flag to indicate when the amount of money inserted is less than a specific threshold. This flag influences the control logic by enabling or disabling certain operations, such as placing a cup or injecting coffee, based on the current state of the machine. It ensures that actions are only performed when the correct conditions are met, thereby coordinating the overall operation of the coffee machine."
+      },
+      {
+        "signal": "Coffee::Coffee_LCD_EN",
+        "description": "Acts as a control signal to manage the enable state of the display. This signal is used to activate or deactivate the display based on the current state and operations of the coffee machine. It ensures that the display shows relevant information only when necessary, such as during user interactions or status updates."
+      },
+      {
+        "signal": "Coffee::Coffee_Place_cup",
+        "description": "Acts as a control signal to initiate the placement of a cup in the coffee machine. This signal is activated when the system determines that a cup should be placed, typically after receiving valid input and ensuring that the necessary conditions, such as sufficient coin insertion, are met. It triggers the mechanical action of positioning a cup to receive coffee, synchronizing with other operations like coffee injection and display updates."
+      },
+      {
+        "signal": "Coffee::Cnt_clr",
+        "description": "Acts as a reset signal to initialize or clear the data path and control unit. It is used to set the system to a known state, typically at the start of an operation or after a specific condition is met. This signal ensures that the internal state and counters are properly reset, allowing the system to begin processing new inputs or commands."
+      }
+    ],
+    "module_description": "Manages the operational states and control logic for a coffee machine. It processes inputs such as coin insertion and cup readiness, and it controls actions like placing a cup, dispensing coffee, and updating the display. The unit also handles financial conditions, enabling or disabling functions based on the amount of money inserted, and manages refunds or coin returns when needed."
+  },
+  {
+    "module_id": "Control_unit",
+    "block_descriptions": [
+      {
+        "code": "always @ (posedge Clock)\nbegin\n\ta<=~Coin_1;\n\tb<=a;\n\tc<=a&&(~b);\nend\n",
+        "description": "This code implements a simple synchronous logic circuit. It captures the negation of an input signal (\"input A\") on the rising edge of the clock and stores it in a register (\"register B\"). Another register (\"register C\") is updated with the logical AND of the current value of \"input A\" and the negated value of \"register B\". This setup is often used for detecting edges or transitions in the input signal, as \"register C\" will be set to 1 when \"input A\" changes from 0 to 1."
+      },
+      {
+        "code": "always @ (posedge Clock)\nbegin\n\td<=~Coin_5;\n\te<=d;\n\tf<=d&&(~e);\nend\n",
+        "description": "This code implements a simple sequential logic circuit that processes input signals on the rising edge of the clock. It uses three registers to store and manipulate the input and intermediate values. The first register inverts the value of \"input A\" and stores it. The second register captures the inverted value from the first register. The third register computes the logical AND of the inverted value and the negation of the second register's value, storing the result. This setup is often used for detecting specific patterns or transitions in the input signal."
+      },
+      {
+        "code": "always @ (posedge Clock)\nbegin\n\tgg<=~Coin_return;\n\thh<=gg;\n\tii<=gg&&(~hh);\nend\n\n\n",
+        "description": "Implements a synchronous edge detector. On each rising edge of the clock, it captures and inverts an input signal. The inverted signal is then delayed by one clock cycle. The final output is a pulse that is high for one clock cycle when the input signal transitions from low to high. This logic is useful for detecting specific changes in the input signal and generating a brief control signal in response."
+      },
+      {
+        "code": "always @ (posedge Clock , negedge Reset_n)\nbegin\n\tif(!Reset_n)\n\t\tpresent_state <= Init;\n\telse\n\t\tpresent_state <= next_state;\nend\n\n//Control unit state\n",
+        "description": "Implements a synchronous state machine with reset functionality. The state machine updates its current state on the rising edge of the clock. If the reset signal is active (low), the state machine resets to an initial state. Otherwise, it transitions to the next state as determined by the control logic."
+      },
+      {
+        "code": "always @ (*)\nbegin\n\tcase(present_state)\n\t\tInit:\n\t\t\tbegin \n\t\t\t\tnext_state = Wait;\n\t\t\t\tsel_en  = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\tsel_sel = 1'b0;\t\t//0\t投币1元\n\t\t\t\tCnt_clr = 1'b0;\t\t//0\t计数器清零\n\t\t\t\tCnt_en  = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\tCnt_ld  = 1'b0;\t\t//0\t不加载预值\n\t\t\t\tCnt_ud  = 1'b0;\t\t//0\t下行计数关\n\t\t\t\tPlace_cup  = 1'b0;\n\t\t\t\tInject_cof = 1'b0;\n\t\t\t\tRefund = 1'b0;\n\t\t\tend\n\t\tWait:\n\t\t\tbegin\n\t\t  \trow_1 <=\"Please invest 1 \";    //第一行显示的16*1字节个内容\n         row_2 <=\"RMB or 5 RMB ^.^\";    //第二行显示的16*1字节个内容\n\t\t\t\tif(c)\n\t\t\t\t\tbegin \n\t\t\t\t\t\tnext_state = Add_1;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\t\telse if(f)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Add_5;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\t\telse\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Wait;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\tend\n\t\tAdd_1:\n\t\t\tbegin \n\t\t\t\tnext_state = Comp;\n\t\t\t\tsel_en = 1'b1;\t\t//1\t选择器使能开\n\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\tCnt_en = 1'b1;\t\t//1\t计数器使能开\n\t\t\t\tCnt_ld = 1'b1;\t\t//1\t加载预值\n\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\tInject_cof= 1'b0;\n\t\t\t\tRefund = 1'b0;\n\t\t\tend\t\n\t\tAdd_5:\n\t\t\tbegin \n\t\t\t\tnext_state = return_1;\n\t\t\t\tsel_en = 1'b1;\t\t//1\t选择器使能开\n\t\t\t\tsel_sel= 1'b1;\t\t//1\t投币5元\n\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\tCnt_en = 1'b1;\t\t//1\t计数器使能开\n\t\t\t\tCnt_ld = 1'b1;\t\t//1\t加载预值\n\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\tInject_cof= 1'b0;\n\t\t\t\tRefund = 1'b0;\n\t\t\tend\n\t\treturn_1:\n\t\t\tbegin\n\t\t\t\t\t  \trow_1 <=\"Please wait for \";    //第一行显示的16*1字节个内容\n                  row_2 <=\"coin refund! ^_^\";    //第二行显示的16*1字节个内容\n\t\t\t\tRefund = 1'b1;\t\t//退款信号\n\t\t\t\tif(ii)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Comp;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b1;\t\t//1\t投币5元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b1;\t\t//1\t计数器使能开\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b1;\t\t//1\t下行计数开\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\tend\n\t   \t\telse \n\t\t\t\t\tbegin\n\t\t\t\t\tnext_state = return_1;\n\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\tRefund = 1'b1;\n\t\t\t\t\tend\n\n\t\t\tend\n\t\t\n\t\tComp:\n\t\t\tbegin\n\t\t\t\tif(Less_3)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Wait;\n\t\t\t\t\t\tsel_en  = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel = 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr = 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en  = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld  = 1'b1;\t\t//1\t加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\t\telse if(Eql_3)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Place;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b1;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\t\telse if(Grt_3)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = return_1;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\t\telse\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Comp;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\tend\t\n\t\tPlace:\n\t\t\tbegin \n\t\t\tPlace_cup = 1'b1;\n\t\t\t\tif(Cup_rdy)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Release;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b1;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\t\telse \n\t\t\t\t\tnext_state = Place;\t\n\t\t\tend\t \n\t\tRelease:\n\t\t\tbegin \n\t\t\t\t\trow_1 <=\"The cup is alre-\";    //第一行显示的16*1字节个内容\n               row_2 <=\"ady in place !  \"; \n\t\t\t\tInject_cof= 1'b1;\n\t\t\t\tif(Cof_rdy)\n\t\t\t\t\tbegin\n\t\t\t\t\t\tnext_state = Init;\n\t\t\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\t\t\tCnt_clr= 1'b1;\t\t//1\t计数器不清零\n\t\t\t\t\t\tCnt_en = 1'b0;\t\t//0\t计数器使能关\n\t\t\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\t\t\tInject_cof= 1'b0;\n\t\t\t\t\t\tRefund = 1'b0;\n\t\t\t\t\tend\n\t\t\t\telse \n\t\t\t\t\tnext_state = Release;\t\t\t\n\t\t\tend\n\t\tdefault:\n\t\t\tbegin \n\t\t\t   present_state = Init;\n\t\t\t\tnext_state = Init;\n\t\t\t\tsel_en = 1'b0;\t\t//0\t选择器使能关\n\t\t\t\tsel_sel= 1'b0;\t\t//0\t投币1元\n\t\t\t\tCnt_clr= 1'b0;\t\t//0\t计数器清零\n\t\t\t\tCnt_en = 1'b1;\t\t//1\t计数器使能开\n\t\t\t\tCnt_ld = 1'b0;\t\t//0\t不加载预值\n\t\t\t\tCnt_ud = 1'b0;\t\t//0\t下行计数关\n\t\t\t\tPlace_cup = 1'b0;\n\t\t\t\tInject_cof= 1'b0;\n\t\t\t\tRefund = 1'b0;\n\t\t\tend\n\tendcase\t\t\t\t\t\nend\nendmodule ",
+        "description": "This code implements a finite state machine (FSM) to control a vending machine's operations. The FSM transitions between states based on input conditions and controls various outputs such as display messages, coin selection, and counter operations. In the initial state, it waits for user input. Depending on the type of coin inserted, it transitions to different states to handle the transaction, including adding to the count, comparing the total, and dispensing the product. If the amount is insufficient, it prompts for more coins; if excess, it initiates a refund. The FSM ensures that the correct sequence of actions is followed, from waiting for input to placing the cup and releasing the product, with appropriate control signals for each step."
+      },
+      {
+        "code": "LCD_Driver U1(\n.CLOCK(Clock),\n.rst_n(Reset_n),\n.LCD_EN(LCD_EN),\n.LCD_RW(LCD_RW),\n.LCD_RS(LCD_RS),\n.LCD_DATA(LCD_DATA),\n.row_1(row_1),\n.row_2(row_2)\n);\n\n//Edge extraction\n",
+        "description": "This code instantiates an LCD driver module, which interfaces with an LCD display. It handles the control and data signals for the LCD, including enabling, read/write operations, and data transfer. The driver manages two rows of the display, likely updating and controlling the content shown on each row. The module is synchronized with a clock signal and can be reset to an initial state using an active-low reset signal."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "Control_unit::gg",
+        "description": "Acts as a control signal in a synchronous edge detector. On each rising clock edge, it captures and inverts an input. The inverted value is delayed by one clock cycle. The final output generates a pulse that is high for one clock cycle when the input transitions from low to high. This logic detects specific changes in the input and produces a brief control signal in response."
+      },
+      {
+        "signal": "Control_unit::Coin_5",
+        "description": "Acts as a control signal in a sequential logic circuit. It is used to trigger the inversion and storage of its value, which is then processed through a series of logical operations. The signal's value and its transformations are stored in multiple registers, enabling the detection of specific patterns or transitions in the input. This mechanism helps in implementing state changes or condition checks based on the input signal's behavior over time."
+      },
+      {
+        "signal": "Control_unit::Reset_n",
+        "description": "Serves as a state flag to manage the reset functionality of a synchronous state machine. When the flag is active (low), it forces the state machine to an initial state, ensuring a known starting point. During normal operation, the flag allows the state machine to transition to the next state based on the control logic. Additionally, this flag synchronizes the LCD driver module, enabling it to reset to an initial state, which is crucial for initializing and maintaining the correct display content and operations."
+      },
+      {
+        "signal": "Control_unit::Cnt_ud",
+        "description": "Acts as a control signal to manage the direction of a counter in the vending machine's state machine. It is used to enable or disable the decrementing of the counter, which is crucial for tracking the amount of money inserted and determining if a refund is necessary. This signal is activated during specific states, such as when a refund is being processed, to ensure the counter decrements correctly, thereby managing the financial transactions accurately."
+      },
+      {
+        "signal": "Control_unit::Cnt_en",
+        "description": "Acts as a control signal to enable the counter in the vending machine's finite state machine (FSM). This signal is activated during specific states to allow the counter to increment or decrement, depending on the transaction's progress. It is used to manage the count of coins inserted and to determine when the total amount is sufficient for a product or requires a refund. The control signal ensures that the counter operates only when necessary, synchronizing with the FSM's state transitions and input conditions."
+      },
+      {
+        "signal": "Control_unit::Cnt_clr",
+        "description": "Acts as a control signal to manage the reset condition of a counter. This signal is deasserted to clear the counter in the initial state, ensuring it starts from zero. In subsequent states, the signal is asserted to prevent the counter from being reset, allowing it to maintain its value during the transaction process. This ensures that the counter accurately tracks the cumulative amount of coins inserted, facilitating the correct operation of the vending machine's state transitions and output controls."
+      },
+      {
+        "signal": "Control_unit::sel_en",
+        "description": "Acts as a control signal to enable the selector in specific states of the finite state machine. It is asserted to allow the selection of different coin values during the transaction process, ensuring that the correct amount is added to the counter. This control signal is crucial for managing the flow of data and enabling the appropriate actions based on the current state and input conditions."
+      },
+      {
+        "signal": "Control_unit::Coin_1",
+        "description": "Acts as a control signal to detect transitions in the input. On each rising edge of the clock, it triggers a sequence where its negated value is stored. This stored value is then used in a logical operation to identify when the input changes from a low to a high state, effectively signaling a specific transition event."
+      },
+      {
+        "signal": "Control_unit::c",
+        "description": "Acts as a state flag to trigger transitions in the finite state machine (FSM) controlling a vending machine. This flag is set when a specific input condition is met, such as a coin being inserted. When the flag is asserted, it causes the FSM to move from the waiting state to the next appropriate state, enabling further actions like updating the display, managing the coin count, and initiating the product dispensing process. The flag ensures that the FSM follows the correct sequence of operations based on the current state and input conditions."
+      },
+      {
+        "signal": "Control_unit::LCD_RW",
+        "description": "Serves as a control signal to manage read and write operations for the LCD display. It determines the direction of data flow, either reading from or writing to the display, ensuring that the correct operation is performed based on the current state of the system. This signal is part of the interface that enables the LCD driver to interact with the display, coordinating the transfer of data and control information."
+      },
+      {
+        "signal": "Control_unit::Coin_return",
+        "description": "Acts as a control signal to implement a synchronous edge detector. On each rising edge of the clock, it captures and inverts an input signal. The inverted signal is then delayed by one clock cycle. The final output is a pulse that is high for one clock cycle when the input signal transitions from low to high. This logic is useful for detecting specific changes in the input signal and generating a brief control signal in response."
+      },
+      {
+        "signal": "Control_unit::Place_cup",
+        "description": "Acts as a control signal to manage the placement of a cup in the vending machine. It is asserted when the total amount matches the required price, indicating that the cup should be placed. This control signal remains active until the cup is ready, after which it deactivates, allowing the next step in the process to proceed."
+      },
+      {
+        "signal": "Control_unit::next_state",
+        "description": "Acts as a state flag to determine the next operational phase of the finite state machine (FSM). This flag is updated based on the current state and input conditions, guiding the FSM through its sequence of operations. During each clock cycle, the FSM checks the current state and updates the state flag to transition to the next appropriate state. This ensures that the vending machine follows the correct sequence of actions, from waiting for user input to processing the transaction and dispensing the product. The state flag also helps in managing the control signals for various outputs, such as display messages and coin handling."
+      },
+      {
+        "signal": "Control_unit::b",
+        "description": "Acts as a state flag to store the negated value of an input signal. This flag is updated on the rising edge of the clock and is used in conjunction with the current input signal to detect specific transitions. The logical AND of the current input and the negated state flag is used to set another register, which indicates a particular change in the input signal. This mechanism is typically employed for edge detection, where the output register is set to 1 when the input signal transitions from 0 to 1."
+      },
+      {
+        "signal": "Control_unit::Clock",
+        "description": "Acts as a clock signal to synchronize the operations of various components in the system. It triggers the updating of registers and state transitions on its rising edge, ensuring that all changes occur at consistent intervals. The clock signal is essential for maintaining the timing and coordination of the logic circuits, including edge detectors and state machines. Additionally, it synchronizes the LCD driver module, enabling proper control and data transfer to the display."
+      },
+      {
+        "signal": "Control_unit::Refund",
+        "description": "Acts as a control signal to initiate the refund process. It is asserted when the system determines that a refund is necessary, such as when the amount inserted exceeds the required amount. This signal triggers the display of a refund message and controls the state transition to handle the refund operation, ensuring that the user receives the correct change before the system resets to wait for the next transaction."
+      },
+      {
+        "signal": "Control_unit::ii",
+        "description": "Acts as a state flag to control the transition between states in a vending machine's finite state machine (FSM). It is used to detect a specific condition, such as the completion of a coin refund, and triggers the next state transition. When this flag is asserted, it indicates that a particular event has occurred, allowing the FSM to proceed to the next step in the transaction process. This ensures that the FSM follows the correct sequence of operations, from waiting for user input to dispensing the product or initiating a refund."
+      },
+      {
+        "signal": "Control_unit::a",
+        "description": "Acts as a control signal to capture the negation of an input on the rising edge of the clock. This signal is then used to update another register with the logical AND of the current input and the negated value of the first register. This configuration is typically used to detect specific transitions in the input, such as a change from 0 to 1, which sets the second register to 1."
+      },
+      {
+        "signal": "Control_unit::row_1",
+        "description": "Acts as a data register to store and display information on the first row of an LCD display. It updates the displayed message based on the current state of the finite state machine, providing user instructions and status updates. The content is changed in response to different states, such as prompting for coin insertion or indicating the progress of the transaction. This ensures that the user is informed about the next steps and the current status of the vending machine."
+      },
+      {
+        "signal": "Control_unit::hh",
+        "description": "Serves as a state flag in a synchronous edge detector. It stores the delayed version of an inverted input signal, which is used to generate a pulse when the input transitions from low to high. This flag helps in detecting specific changes in the input and is essential for creating a brief control signal in response to those changes."
+      },
+      {
+        "signal": "Control_unit::LCD_EN",
+        "description": "Acts as a control signal to manage the enable state of the LCD display. This signal is used to activate or deactivate the display, allowing the driver to control when the LCD should respond to data and command inputs. When asserted, it indicates that the display is ready to perform operations such as updating the content on the specified rows. The signal ensures that the display operates in sync with the clock and can be reset to an initial state."
+      },
+      {
+        "signal": "Control_unit::Cnt_ld",
+        "description": "Acts as a control signal to load a preset value into a counter. This signal is activated during specific state transitions to initialize the counter with a predefined value, ensuring that the counter starts from a known state. It is used in the state machine to manage the vending process, particularly when transitioning to states where the counter needs to be reset or initialized with a specific value. The signal is part of a broader set of control signals that manage the overall operation and state transitions of the vending machine."
+      },
+      {
+        "signal": "Control_unit::LCD_DATA",
+        "description": "Serves as a data path for transferring information to the LCD display. It carries the content that needs to be shown on the display, enabling the update and control of the text or images on the screen. This signal is essential for the proper functioning of the display, ensuring that the correct data is presented to the user."
+      },
+      {
+        "signal": "Control_unit::d",
+        "description": "Acts as a data register to store the inverted value of an input signal. On each clock cycle, it captures and inverts the input, then passes this value to another register. This intermediate value is used in a logical AND operation with the negation of the second register's value, which helps in detecting specific patterns or transitions in the input signal."
+      },
+      {
+        "signal": "Control_unit::present_state",
+        "description": "Serves as a state flag to manage the current operational phase of a vending machine. This flag is updated on the rising edge of the clock and resets to an initial state when a reset signal is active. The state flag dictates the flow of operations, such as waiting for user input, processing coin insertion, and controlling the sequence of actions like displaying messages, enabling counters, and initiating product dispensing or refunds. It ensures that each step in the vending process is executed in the correct order, based on the current state and input conditions."
+      },
+      {
+        "signal": "Control_unit::row_2",
+        "description": "Acts as a data register to store and display information on the second row of an LCD display. It updates the content based on the current state of the finite state machine, showing different messages to guide the user through the vending process. The displayed messages include prompts for coin insertion, refund instructions, and status updates. This register is part of an LCD driver module that manages the display's control and data signals, ensuring the correct information is shown at each step of the transaction."
+      },
+      {
+        "signal": "Control_unit::Grt_3",
+        "description": "Acts as a state flag to determine the next state in the finite state machine. When asserted, it triggers a transition to a specific state where the system prepares for a refund. This flag is part of a larger control mechanism that manages the vending machine's operations, including handling different coin inputs, updating the count, and managing the display messages. The flag ensures that the FSM follows the correct sequence of actions, such as waiting for user input, processing the transaction, and handling refunds when necessary."
+      },
+      {
+        "signal": "Control_unit::Eql_3",
+        "description": "Acts as a state flag to determine the next action in the vending machine's finite state machine (FSM). When asserted, it triggers the transition to the \"Place\" state, where the machine prepares to place a cup. This flag is checked during the \"Comp\" state, where the FSM compares the current count with a threshold. If the count matches the threshold, the flag is used to initiate the placement of the cup, ensuring that the correct sequence of operations is followed. The flag helps in coordinating the control signals and managing the state transitions to ensure the vending process is executed correctly."
+      },
+      {
+        "signal": "Control_unit::sel_sel",
+        "description": "Acts as a control signal to indicate the type of coin inserted. It is used to differentiate between different coin denominations, such as 1 RMB and 5 RMB, and influences the state transitions and operations within the vending machine. When asserted, it triggers specific actions in the state machine, such as transitioning to the appropriate state for handling the inserted coin, enabling the counter, and managing the refund process. This control signal ensures that the vending machine responds correctly to the user's input and performs the necessary operations based on the coin value."
+      },
+      {
+        "signal": "Control_unit::LCD_RS",
+        "description": "Acts as a control signal to differentiate between data and instruction transfers in the LCD driver. When asserted, it indicates that the data being sent to the LCD is for display purposes, such as updating the content on one of the two rows. When de-asserted, it signals that the data is an instruction, which can be used to configure or control the LCD's operation. This control signal is essential for proper communication and function of the LCD display."
+      },
+      {
+        "signal": "Control_unit::Less_3",
+        "description": "Acts as a state flag to determine the next state in the finite state machine. When this flag is asserted, it indicates that the current count is less than a specific threshold, causing the FSM to transition back to the waiting state. This flag helps in managing the flow of the vending machine's operations by ensuring that the correct sequence of actions is followed, such as waiting for additional coins when the amount is insufficient."
+      },
+      {
+        "signal": "Control_unit::e",
+        "description": "Acts as a state flag to capture and hold the inverted value of the input signal. It is updated on every clock cycle to reflect the current state of the inverted input, which is then used in conjunction with other signals to detect specific patterns or transitions. This state flag is crucial for maintaining the intermediate state necessary for the subsequent logical operations within the circuit."
+      },
+      {
+        "signal": "Control_unit::Cup_rdy",
+        "description": "Acts as a state flag to indicate the readiness of the cup placement. When asserted, it triggers the transition to the next state, enabling the release of the product. This flag ensures that the system waits until the cup is properly placed before proceeding with the subsequent steps, maintaining the correct sequence of operations in the vending machine's finite state machine."
+      },
+      {
+        "signal": "Control_unit::Cof_rdy",
+        "description": "Acts as a state flag to indicate the readiness of a specific condition in the vending machine's operation. When this flag is asserted, it triggers the transition back to the initial state, signaling that the current operation has been completed successfully. This flag is crucial for ensuring that the machine only proceeds to the next cycle after the current one is fully resolved, maintaining the correct sequence of operations and preventing any premature state transitions."
+      },
+      {
+        "signal": "Control_unit::Inject_cof",
+        "description": "Acts as a control signal to initiate the release of a product in a vending machine. It is asserted when the system reaches the appropriate state and all necessary conditions are met, such as the cup being in place and the product being ready. This control signal triggers the final step in the vending process, ensuring that the product is dispensed to the user."
+      },
+      {
+        "signal": "Control_unit::f",
+        "description": "Acts as a state flag to trigger a transition in the finite state machine (FSM) when a specific condition is met. This flag is used to detect a particular input pattern and initiate the next state in the FSM, which in turn controls the vending machine's operations. When asserted, it causes the FSM to move to a new state where it can handle the insertion of a specific type of coin and update the display and control signals accordingly. This setup ensures that the vending machine follows the correct sequence of actions based on the user's input."
+      }
+    ],
+    "module_description": "This code implements an LCD driver that interfaces with an LCD display to manage and update its content. It handles the control signals for enabling and read/write operations, as well as the data transfer to the display. The driver supports two rows of text, updating and controlling the content shown on each row. Synchronized with a clock signal, the driver can be reset to an initial state using an active-low reset signal, ensuring the display is properly initialized and updated in a controlled manner."
+  },
+  {
+    "module_id": "Data_path",
+    "block_descriptions": [
+      {
+        "code": "Selector U0(\n.Selector_en(Data_path_sel_en),\n.Selector_sel(Data_path_sel_sel),\n.Selector_out(Sel_to_Add)\n);\n\n//实例化全加器\n",
+        "description": "This code implements a multiplexer (selector) that chooses between multiple input signals based on a control signal. The selector is enabled by an \"enable\" signal and the specific input is chosen by a \"select\" signal. When the enable signal is active, the output of the multiplexer is determined by the select signal, which routes one of the inputs to the output. This is typically used in data path control to direct different data streams to a common output, such as feeding into an adder."
+      },
+      {
+        "code": "Adder    U1(\n.Adder_In1(Sel_to_Add),\n.Adder_In2(Cnt_to_Com),\n.Adder_Result(Add_to_Cnt)\n);\n\n//实例化计数器\n",
+        "description": "This code implements a simple adder logic. It takes two inputs, \"input A\" and \"input B,\" and produces their sum as \"output C.\" The adder performs a combinational operation, meaning the output is updated immediately based on the current values of the inputs. This type of logic is commonly used in arithmetic operations where the result needs to be computed quickly and without any clock signal."
+      },
+      {
+        "code": "Counter  U2(\n.Counter_clock(Data_path_clock),\n.Counter_rst_n(Data_path_rst_n),\n.Counter_LD(Data_path_cnt_ld),\n.Counter_EN(Data_path_cnt_en),\n.Counter_UD(Data_path_cnt_ud),\n.Counter_pre_value(Add_to_Cnt),\n.Counter_cnt_value(Cnt_to_Com)\n);\n//实例化比较器\n",
+        "description": "This code implements a synchronous up-down counter with load and enable functionalities. The counter increments or decrements based on a control flag, and it can be loaded with an initial value when a load signal is active. The counter operates on the rising edge of the clock and can be reset to a known state using a reset signal. The enable signal controls whether the counter should increment, decrement, or hold its current value. The current count value is output for further processing."
+      },
+      {
+        "code": "Comparator U3(\n.Comparator_In(Cnt_to_Com),\n.Comparator_Less_3(Data_path_com_Less_3),\n.Comparator_Eql_3(Data_path_com_Eql_3),\n.Comparator_Grt_3(Data_path_com_Grt_3)\n);\n\n",
+        "description": "This code instantiates a comparator module that compares two values. The comparator has an input value and generates three outputs: one indicating if the input is less than a reference value, another indicating if it is equal to the reference value, and a third indicating if it is greater than the reference value. This functionality is useful for decision-making in data path control or conditional operations."
+      },
+      {
+        "code": "Nixie_tube U4(\n.Seg(Cnt_to_Com),\n.Data1(Data1)\n);\n\nendmodule ",
+        "description": "This code instantiates a Nixie tube display module. It connects an input signal, \"input A,\" to the segment control of the Nixie tube, and another input, \"data B,\" to the data input. The Nixie tube is used to visually display the data provided by \"data B\" using the segment control from \"input A.\""
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "Data_path::Data_path_com_Grt_3",
+        "description": "Serves as a state flag to indicate when the input value is greater than a reference value. This flag is used in decision-making processes within the data path, enabling conditional operations based on the comparison result. It helps in directing the flow of data or executing specific actions when the condition of the input being greater than the reference is met."
+      },
+      {
+        "signal": "Data_path::Add_to_Cnt",
+        "description": "Acts as a data register to store the intermediate result of an addition operation. This value is then used as the initial count for a synchronous up-down counter. The data register holds the sum of two inputs and provides it to the counter, which can load this value, increment, decrement, or hold its current state based on control signals. The output of the counter is used for further processing in the system."
+      },
+      {
+        "signal": "Data_path::Data_path_cnt_ud",
+        "description": "Serves as a control signal to determine the direction of a counter, whether it should increment or decrement. This signal is part of a synchronous up-down counter with load and enable functionalities. The counter updates its value on the rising edge of the clock and can be reset or loaded with an initial value. The enable signal dictates if the counter should change its value, and the current count is output for further processing."
+      },
+      {
+        "signal": "Data_path::Data_path_com_Less_3",
+        "description": "Serves as a state flag to indicate when the input value is less than a reference value. This flag is used in decision-making processes within the data path, enabling conditional operations based on the comparison result. When the input is below the reference, this flag triggers specific actions or routes in the data flow, facilitating precise control and response to varying input conditions."
+      },
+      {
+        "signal": "Data_path::Data_path_com_Eql_3",
+        "description": "Serves as a state flag to indicate when the input value is equal to a reference value. This flag is used in decision-making processes within the data path, enabling conditional operations based on the equality of the compared values. It helps in directing the flow of data or triggering specific actions when the input matches the reference."
+      },
+      {
+        "signal": "Data_path::Data_path_clock",
+        "description": "Serves as the clock signal for a synchronous up-down counter, driving its operation on each rising edge. This clock signal synchronizes the counter's actions, including incrementing, decrementing, and loading initial values. The counter's behavior is also influenced by other control signals that manage its state and output. The current count value is provided for further processing in the system."
+      },
+      {
+        "signal": "Data_path::Data_path_sel_sel",
+        "description": "Acts as a control signal to determine which input is selected in a multiplexer. When the enable signal is active, this control signal routes one of the available inputs to the output. It is used in data path control to direct different data streams to a common output, such as feeding into an adder."
+      },
+      {
+        "signal": "Data_path::Data1",
+        "description": "Acts as a data register to provide the information that needs to be visually displayed. It holds the value that is to be shown on the Nixie tube, with the segment control signals determining how this value is represented on the display."
+      },
+      {
+        "signal": "Data_path::Data_path_sel_en",
+        "description": "Acts as a control signal to activate a multiplexer in the data path. When this control signal is active, it allows the multiplexer to pass one of its input signals to the output, based on another select signal. This functionality is crucial for directing different data streams to a common destination, such as an adder, ensuring that the correct data is processed at the right time."
+      },
+      {
+        "signal": "Data_path::Data_path_cnt_en",
+        "description": "Serves as a control signal to manage the operation of a synchronous up-down counter. When active, it allows the counter to increment, decrement, or retain its current value based on other control inputs. This signal ensures that the counter only changes its state when specific conditions are met, otherwise, it holds the current count. The current value of the counter is then provided for further processing."
+      },
+      {
+        "signal": "Data_path::Data_path_rst_n",
+        "description": "Acts as a reset signal to initialize the counter to a known state. When asserted, it resets the counter, ensuring that it starts from a predefined value. This is crucial for synchronizing the counter's operation and maintaining consistent behavior across different cycles or after a system reset. The reset functionality is essential for the reliable operation of the counter, especially in scenarios requiring precise control over the count value."
+      },
+      {
+        "signal": "Data_path::Sel_to_Add",
+        "description": "Acts as a data path to route selected input signals to an arithmetic operation. Enabled and controlled by external signals, it directs one of several possible inputs to the adder. This routing is crucial for directing different data streams to a common processing unit, such as an adder, where the selected input is combined with another value to produce a sum. The output of this selection process is then used in further computations, ensuring that the correct data is processed at the right time."
+      },
+      {
+        "signal": "Data_path::Data_path_cnt_ld",
+        "description": "Serves as a control signal to load an initial value into the counter. When this signal is active, it overrides the current count and sets the counter to a specified pre-value, allowing for direct data initialization or resetting of the count. This functionality is crucial for setting up the counter with a specific starting point or for reinitializing it during operation."
+      },
+      {
+        "signal": "Data_path::Cnt_to_Com",
+        "description": "Acts as a data register to store and propagate the current count value. This value is used in multiple operations, including arithmetic addition, where it is added to another input to produce a sum. It also serves as the current value for a counter, which can be incremented, decremented, or loaded with a new value based on control signals. Additionally, this data register is compared against a reference value in a comparator to determine if it is less than, equal to, or greater than the reference. Finally, it controls the segment display of a Nixie tube, visually representing the data."
+      }
+    ],
+    "module_description": "This code implements a Nixie tube display controller. It takes an input signal to control the segments of the Nixie tube and another input to provide the data to be displayed. The module manages the visual representation of the data, using the segment control to drive the Nixie tube's display. This is typically used in systems where a human-readable numeric or alphanumeric display is required, such as in digital clocks, meters, or other user interfaces."
+  }
+]

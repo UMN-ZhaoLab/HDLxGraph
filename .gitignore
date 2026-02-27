@@ -1,0 +1,54 @@
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Scala / Mill / Metals / Bloop
+.bloop/
+.metals/
+.bsp/
+.scala-build/
+out/
+graph_storage/netlist2neo4j/out/
+
+# Python cache / virtual env
+__pycache__/
+*.py[cod]
+*.so
+.venv/
+venv/
+env/
+
+# Python tooling caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Logs and temp files
+*.log
+*.tmp
+*.swp
+*.swo
+
+# Project runtime/generated artifacts
+output/
+verilog_files.txt
+config/config.json
+
+# Benchmark/debug generated outputs
+benchmark/
+benchmark_results/
+benchmark/debugging/results/
+dataset/completion/verilog-eval/build/**/*_response.txt
+dataset/completion/verilog-eval/build/**/*-sv-iv-test.log
+
+# Large local datasets
+hdlsearch/database/
+
+# Local environment secrets
+.env
+.env.*

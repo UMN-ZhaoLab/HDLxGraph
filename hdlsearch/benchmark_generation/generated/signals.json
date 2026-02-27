@@ -1,0 +1,403 @@
+[
+      {
+        "signal": "aib_adapt_fifo_ptr::wr_addr_gry_ff",
+        "description": "Acts as a data register to store the Gray code representation of the write address. It updates on the rising edge of the write clock when new data is available and resets to zero during reset conditions. This register ensures that the write address is correctly maintained and synchronized between different clock domains, preventing metastability issues. The stored value is used for synchronization with the read clock domain, ensuring proper handling of asynchronous signals."
+      },
+      {
+        "signal": "aib_adapt_fifo_ptr::rd_clk",
+        "description": "Acts as a clock signal to synchronize the read address pointer and data transfer. It triggers the update of the binary and Gray-coded read address registers on its rising edge. When the reset is active, both registers are initialized to zero. Otherwise, they are updated with the next values. The clock also enables the synchronization of the write address from the write domain to the read domain, ensuring that the data is stable and correctly transferred, thus preventing metastability issues."
+      },
+      {
+        "signal": "aib_adapt_rx_fifo::fifo_data_ff",
+        "description": "Acts as a data register to store and provide the FIFO data. It holds the values written into the FIFO from the write data bus and outputs them for reading. The data register ensures that the data is correctly synchronized and available across different clock domains, maintaining data integrity during read operations."
+      },
+      {
+        "signal": "aib_adapt_rx_fifo::rx_wa_mode_sync",
+        "description": "Acts as a state flag to indicate the word alignment mode. It influences the logic by enabling or disabling the word alignment feature, which is crucial for detecting and aligning data words based on specific patterns. When this flag is active, it triggers the WAM logic to monitor the input data and generate a synchronized word alignment indication. This, in turn, affects the write enable signal for the FIFO, ensuring that data is written only when properly aligned, thus maintaining data integrity across clock domains."
+      },
+      {
+        "signal": "aib_adapt_rx_fifo::r_wa_en",
+        "description": "Acts as a control signal to enable the word alignment feature in a dual-clock FIFO write address management system. When activated, it initiates the detection of specific patterns in the input data, aligning the data words accordingly. This signal influences the generation of a synchronized word alignment indication and controls the write enable for the FIFO, ensuring that data is written only when the alignment conditions are met."
+      },
+      {
+        "signal": "aib_adapter::csr_rx_mkbit",
+        "description": "Acts as a control signal to configure the word mark insertion in the receiver channel adapter. This signal is used to set specific bits that determine how and when word marks are inserted into the data stream, which is crucial for proper data framing and synchronization. The control signal is part of a set of configurable inputs that allow fine-tuning of the adapter's behavior, including alignment thresholds and delay settings, to ensure reliable data transfer and processing."
+      },
+      {
+        "signal": "aib_adapter::data_out_int",
+        "description": "This signal acts as a data register in the AIB (Advanced Interface Bus) receiver channel adapter. It captures and holds an 80-bit value from an internal data source on the rising edge of a clock signal. When a reset signal is active, the register is cleared to all zeros; otherwise, it updates with the input data. This register is used for data synchronization and temporary storage, ensuring that the data is properly aligned and ready for further processing in the data path."
+      },
+      {
+        "signal": "aib_adapter_rxchnl::rxwr_rstn",
+        "description": "Acts as an asynchronous reset signal for the data bus inversion (DBI) logic in the RX FIFO data path. When asserted, it resets the module to its initial state, ensuring that any ongoing processing is halted and the module is ready for new operations. This control signal is crucial for maintaining the integrity of the data path, particularly during initialization or when recovering from errors. The reset functionality operates independently of the clock, allowing for immediate and reliable system state management."
+      },
+      {
+        "signal": "aib_adapter_rxchnl::rx_fifo_data_out",
+        "description": "Acts as a data register to store and output synchronized data from the FIFO. It holds the data that has been written into the FIFO and is ready to be read out, ensuring that the data is properly aligned and available for further processing. This register is crucial for maintaining the integrity of the data during the transfer between different clock domains."
+      },
+      {
+        "signal": "aib_adapter_rxchnl::r_rx_fifo_mode",
+        "description": "Acts as a configuration signal to set the operating mode of the FIFO. This control signal determines how the FIFO processes and manages data, such as the method of data handling and synchronization. It influences the behavior of the FIFO during data transfer, allowing for different operational characteristics based on the selected mode."
+      },
+      {
+        "signal": "aib_avalon::tx_clk_div_4_ff",
+        "description": "Acts as a state flag to indicate the divided clock state in the transmit path. It is part of a clock divider circuit that generates a slower clock signal, which is used for timing and synchronization in the BERT (Bit Error Rate Test) operations. This flag helps in coordinating the timing of various BERT-related activities, ensuring that the system operates at the correct frequency and that data is processed at the right intervals."
+      },
+      {
+        "signal": "Coffee::Coffee_Inject_cof",
+        "description": "Acts as a control signal to initiate the coffee injection process. It is asserted when the machine has detected that a cup is in place and the correct amount of money has been inserted. This signal triggers the mechanism to dispense coffee into the cup, ensuring that the action only occurs under the appropriate conditions."
+      },
+      {
+        "signal": "Coffee::Coffee_Refund",
+        "description": "Acts as a control signal to initiate the refund process in the coffee machine. It is activated when the conditions for a refund are met, such as an overpayment or a malfunction. This signal triggers the return of coins to the user, ensuring that any excess payment is refunded appropriately."
+      },
+      {
+        "signal": "Coffee::Coffee_Cof_rdy",
+        "description": "Acts as a state flag to indicate the readiness of coffee in the machine. It is used to trigger the next steps in the process, such as injecting coffee into a cup, once the coffee is ready. This flag helps in synchronizing the operations and ensuring that the machine only proceeds with the next action when the coffee is properly prepared."
+      },
+      {
+        "signal": "Coffee::Coffee_LCD_DATA",
+        "description": "Acts as a data path to transfer information to the display. It carries the data that needs to be shown on the LCD, such as operational status or instructions for the user. This data register is essential for updating the display with relevant information during the coffee machine's operation, ensuring that the user is informed about the current state and any required actions."
+      },
+      {
+        "signal": "Control_unit::Cup_rdy",
+        "description": "Acts as a state flag to indicate the readiness of the cup placement. When asserted, it triggers the transition to the next state, enabling the release of the product. This flag ensures that the system waits until the cup is properly placed before proceeding with the subsequent steps, maintaining the correct sequence of operations in the vending machine's finite state machine."
+      },
+      {
+        "signal": "Control_unit::Cof_rdy",
+        "description": "Acts as a state flag to indicate the readiness of a specific condition in the vending machine's operation. When this flag is asserted, it triggers the transition back to the initial state, signaling that the current operation has been completed successfully. This flag is crucial for ensuring that the machine only proceeds to the next cycle after the current one is fully resolved, maintaining the correct sequence of operations and preventing any premature state transitions."
+      },
+      {
+        "signal": "Control_unit::Inject_cof",
+        "description": "Acts as a control signal to initiate the release of a product in a vending machine. It is asserted when the system reaches the appropriate state and all necessary conditions are met, such as the cup being in place and the product being ready. This control signal triggers the final step in the vending process, ensuring that the product is dispensed to the user."
+      },
+      {
+        "signal": "Data_path::Sel_to_Add",
+        "description": "Acts as a data path to route selected input signals to an arithmetic operation. Enabled and controlled by external signals, it directs one of several possible inputs to the adder. This routing is crucial for directing different data streams to a common processing unit, such as an adder, where the selected input is combined with another value to produce a sum. The output of this selection process is then used in further computations, ensuring that the correct data is processed at the right time."
+      },
+      {
+        "signal": "apb_spi_master::spi_clk_div",
+        "description": "Acts as a configuration parameter to set the clock division for the SPI master controller. This value is used to determine the frequency of the SPI clock, which is crucial for synchronizing data transmission and reception with connected peripherals. When valid, it enables the controller to generate the appropriate clock signal, ensuring that the data transfer rates are consistent and reliable."
+      },
+      {
+        "signal": "apb_spi_master::spi_mode",
+        "description": "Acts as a state flag to determine the operational mode of the SPI interface. This flag influences the configuration of output enable signals, which control the activation and deactivation of specific data lines. Depending on the value of the state flag, different sets of output enables are activated or deactivated, ensuring that the correct data lines are used for the current mode of operation. This logic is crucial for managing the SPI interface's behavior in various modes, such as standard and quad modes, to ensure proper communication with connected devices."
+      },
+      {
+        "signal": "apb_spi_master::spi_dummy_wr",
+        "description": "Acts as a control signal to manage dummy write operations in the SPI system. This signal is used to indicate when a dummy write should be performed, typically to maintain proper timing and synchronization in the SPI communication. It helps in ensuring that the data transfer protocol is adhered to, even when no actual data needs to be written, thus maintaining the integrity of the communication sequence."
+      },
+      {
+        "signal": "apb_spi_master::spi_data_tx_valid",
+        "description": "Acts as a control signal to indicate the validity of data being transmitted. It is used to manage the flow of data from the source to the destination, ensuring that data is only processed when it is valid and the receiving component is ready. This signal is part of a handshaking mechanism that helps in synchronizing the data transfer process, preventing data corruption and ensuring reliable communication between the SPI master and its peripherals."
+      },
+      {
+        "signal": "apb_uart_sv::parity_error",
+        "description": "Acts as an error flag to indicate issues during data reception. When a parity error is detected, this flag is set, signaling that the received data does not match the expected parity. This state flag is used to notify the system of potential data corruption, allowing for error handling and possibly triggering corrective actions or retransmission requests."
+      },
+      {
+        "signal": "apb_uart_sv::tx_elements",
+        "description": "The signal acts as a state flag to indicate the number of elements currently stored in the transmit FIFO. It influences the logic by providing status information that is used to update the UART's control and status registers. Specifically, it helps determine whether the transmit FIFO is empty, which is reflected in the status register. This flag also contributes to the decision-making process for generating interrupts, such as when the FIFO reaches a certain level or becomes empty. The state flag is essential for managing the data flow and ensuring proper operation of the UART's transmission capabilities."
+      },
+      {
+        "signal": "apb_uart_sv::event_o",
+        "description": "Acts as an interrupt signal to indicate when specific conditions are met in the UART controller. This control signal is generated based on the status of error flags, buffer levels, and a trigger level, and it is influenced by an interrupt enable register. The signal triggers an event that can be acknowledged and cleared using a clear interrupt signal, thereby managing the flow of interrupts in the system."
+      },
+      {
+        "signal": "e203_clk_ctrl::lsu_clk_en",
+        "description": "Acts as a control signal to manage the propagation of an input clock to the LSU (load store unit) clock. When active, it allows the input clock to pass through to the output, enabling the corresponding part of the design. This signal helps in reducing power consumption by disabling the clock to specific areas when they are not in use. The test mode can also affect the clock gating, typically for testing purposes."
+      },
+      {
+        "signal": "e203_core::pipe_flush_req",
+        "description": "Acts as a control signal to initiate the flushing of the pipeline. This control signal is used to clear the pipeline stages, typically in response to an exception or a change in the program flow that requires the current instructions to be discarded. It ensures that the processor can quickly transition to a new state without carrying over any pending operations from the previous state."
+      },
+      {
+        "signal": "e203_core::lsu_active",
+        "description": "Acts as a state flag to indicate when the load-store unit (LSU) is active and processing memory transactions. This flag is used to coordinate with other components, such as the address generation unit (AGU), tightly-coupled memories (ITCM and DTCM), and the bus interface unit (BIU). It ensures that the LSU is ready to handle read and write operations and manage data transfer, while also supporting exception handling and commit operations. The flag helps in synchronizing the LSU's activities with the overall system, ensuring proper timing and state management."
+      },
+      {
+        "signal": "e203_core::ifu_o_pc",
+        "description": "Acts as a data register to store the program counter value. This value is used to track the current instruction address and is passed from the Instruction Fetch Unit (IFU) to the Execution Unit (EXU). It ensures that the EXU has the correct address for the instruction being executed, which is crucial for maintaining the flow of the program and handling control flow instructions. The signal is also used to detect and handle misalignment or bus errors, ensuring the integrity of the instruction fetch process."
+      },
+      {
+        "signal": "e203_core::lsu_o_ready",
+        "description": "Acts as a control signal to indicate the readiness of the load-store unit (LSU) to output new data. It is used in handshaking between the LSU and other units, such as the execution unit, to synchronize data transfer and ensure that the LSU can process incoming commands without overflow. This signal helps manage the flow of data and control signals, ensuring that memory operations are executed efficiently and in the correct sequence."
+      },
+      {
+        "signal": "e203_core::ifu_o_ready",
+        "description": "Acts as a control signal to indicate the readiness of the execution unit to accept new instructions from the instruction fetch unit. This signal is part of a handshaking mechanism that ensures proper synchronization and data flow between the IFU and the execution unit, preventing data loss or corruption. When asserted, it allows the IFU to transfer the next instruction and associated data to the execution unit, ensuring that the pipeline remains full and the processor operates efficiently."
+      },
+      {
+        "signal": "e203_core::ifu_o_rs1idx",
+        "description": "Acts as a data register to store the index of the first source register (RS1) for an instruction. This index is used to fetch the corresponding data from the register file, which is essential for the execution of the instruction. The value in this register is passed to the execution unit, where it is used to read the correct data and perform the necessary operations."
+      },
+      {
+        "signal": "e203_cpu::ext2itcm_icb_rsp_valid",
+        "description": "Acts as a control signal to indicate the validity of a response from the external interface to the ITCM. This signal is asserted when the data or error information in the response is ready to be processed, ensuring that the receiving component can handle the response appropriately. It synchronizes the communication between the external interface and the ITCM, facilitating reliable data transfer and error handling."
+      },
+      {
+        "signal": "e203_cpu::sft_irq_a",
+        "description": "Acts as a control signal to indicate the presence of a software-generated interrupt. It is one of several asynchronous interrupt sources that are synchronized to the main clock domain by the interrupt synchronization module. This ensures that the interrupt request is reliably detected and processed, even if it originates from a different clock domain. The synchronization is essential for maintaining the integrity and reliability of the system's interrupt handling mechanism."
+      },
+      {
+        "signal": "e203_cpu::dpc_r",
+        "description": "Acts as a data register to store the dynamic next program counter value. This register holds the address of the instruction to be executed next when the core is in debug mode, allowing for precise control and inspection of the program flow. It is used to resume execution from a specific point after a debug event, such as a breakpoint or halt."
+      },
+      {
+        "signal": "e203_dtcm_ctrl::dtcm_ram_we",
+        "description": "Acts as a control signal to manage write operations to the SRAM. It is asserted to enable data to be written into the memory when a valid write command is issued, ensuring that the data is stored at the specified address. This signal plays a crucial role in coordinating the timing and execution of write transactions, synchronizing with other control and data signals to ensure proper data integrity and flow."
+      },
+      {
+        "signal": "e203_dtcm_ram::cs",
+        "description": "Acts as a control signal to enable or disable the RAM module. When asserted, it allows the module to perform read or write operations based on other control signals. This signal is crucial for managing access to the memory, ensuring that data storage and retrieval only occur when intended, thus preventing unintended data corruption or access."
+      },
+      {
+        "signal": "e203_exu::alu_cmt_ready",
+        "description": "Acts as a control signal to indicate the readiness of the ALU to commit its results. This signal is used to synchronize the data transfer between the ALU and the commit stage, ensuring that the commit stage only processes valid and ready ALU outputs. It helps in managing the flow of instructions through the pipeline, preventing data hazards, and maintaining the correct order of instruction execution."
+      },
+      {
+        "signal": "e203_exu::flush_req",
+        "description": "Acts as a control signal to initiate a pipeline flush. This signal is used to request the clearing of the current pipeline state, typically in response to an exception or a change in the flow of execution. When asserted, it triggers a sequence of actions that reset the pipeline stages, ensuring that any pending instructions are discarded and the pipeline is prepared for new instructions. This mechanism is crucial for maintaining the correct state and preventing the execution of invalid or obsolete instructions."
+      },
+      {
+        "signal": "bch_dec::ival",
+        "description": "Acts as a control signal that validates input data streams and synchronizes their processing within an error correction algorithm. It ensures proper alignment of data by asserting validity conditions during active clock cycles, enabling the transfer of syndrome values to subsequent stages. This signal also coordinates with memory access operations and triggers state transitions in sequential logic blocks. Its role includes managing synchronization between modules, particularly when interfacing with external memory or generating intermediate results for error detection. The signal's behavior is tightly coupled with reset and clock enable controls, ensuring robust operation under varying input conditions while maintaining data integrity across pipeline stages."
+      },
+      {
+        "signal": "fpga_uart_sata_example_top::link_initialized",
+        "description": "Acts as a state indicator to signify the completion of the initialization process for a high-speed communication link. When asserted, it denotes that the system is ready to handle data transactions between the host and the connected device. This status signal ensures proper synchronization by enabling subsequent operations only after the link is fully established. It plays a critical role in transitioning the system from an initialization phase to an operational state, thereby preventing data transfer attempts during unstable conditions. Its functionality is integral to maintaining protocol compatibility and ensuring reliable communication."
+      },
+      {
+        "signal": "fpga_uart_sata_example_top::rfis_tdata",
+        "description": "Acts as a data register within a communication bridge that transfers information between SATA and UART protocols. It holds the payload for transmission, forwarding either valid data or an error pattern based on the state of an associated error flag. The register's contents are synchronized with a specific clock domain and are integral to the data stream's flow control, ensuring proper framing and timing during transmission. Its value directly influences the output of the transmitter, determining whether meaningful data or a predefined error code is sent. This mechanism supports robust error handling and reliable data propagation across the interface."
+      },
+      {
+        "signal": "sata_hba_top::rfis_err",
+        "description": "Acts as a state flag to indicate errors during the reception of data frames in a streaming interface. Asserted when an issue is detected in the received data stream, it serves as a feedback mechanism to higher-level logic for error handling and recovery. This signal ensures that erroneous data is flagged and can be appropriately managed, maintaining the integrity of the communication protocol. It plays a critical role in synchronizing error reporting between the transport and command layers, enabling robust fault detection and response in a synchronous clock domain."
+      },
+      {
+        "signal": "sata_hba_top::rx_byteisaligned",
+        "description": "Acts as a state indicator to confirm the alignment of received data bytes within the communication protocol. This signal is asserted when the receiver logic successfully aligns incoming data streams, enabling further processing of the data. It plays a crucial role in ensuring proper synchronization between the link and PHY layers, as it determines whether the received data is correctly framed and ready for decoding. The signal influences the control flow by gating subsequent operations that depend on aligned data, such as frame parsing or error checking. Its status is monitored to maintain data integrity and protocol compliance during high-speed communication."
+      },
+      {
+        "signal": "sata_hba_top::gt_refclk",
+        "description": "Acts as a clock signal that drives the timing of data transmission and reception within a high-speed communication interface. It ensures synchronization between internal logic and external hardware components, enabling proper alignment and processing of data streams. This signal is critical for maintaining protocol adherence and managing the interaction between control and data paths. By providing a stable reference, it supports functions such as pattern detection, idle state handling, and bidirectional communication. Its role is essential in coordinating resets, initialization sequences, and the overall operation of the transceiver, ensuring reliable data exchange across physical channels."
+      },
+      {
+        "signal": "controler::done",
+        "description": "Acts as a state flag to indicate the completion of an I2C or EEPROM read/write operation. This flag is used to signal that the data transfer process has finished, allowing the system to proceed with subsequent operations or handle the output data. When asserted, it synchronizes the control logic and ensures that the next steps are taken only after the current operation is fully completed."
+      },
+      {
+        "signal": "controler::i2c_sda_o",
+        "description": "Acts as a data path control signal to manage the output of the I2C data line. It is used to drive the SDA line during the transmission of data, ensuring that the correct data bits are sent out to the I2C bus. This control signal is essential for coordinating the data transfer process, enabling the I2C master to communicate with other devices on the bus by setting the appropriate logic levels on the SDA line."
+      },
+      {
+        "signal": "controler::i2c_sda_oe",
+        "description": "Acts as a control signal to manage the output enable for the I2C data line. This signal is used to switch the SDA line between input and output modes, ensuring proper bidirectional communication over the I2C bus. It is asserted when the I2C master needs to drive data onto the SDA line and de-asserted when it should be in a high-impedance state to allow other devices to drive the line."
+      },
+      {
+        "signal": "eeprom_rw::user_data",
+        "description": "This signal acts as a data register to store and forward information from a FIFO queue. On each clock cycle, if the system is not in a reset state, it captures the current value from the FIFO and holds it. Simultaneously, a validity flag is set based on whether the FIFO is being read. This mechanism ensures that the data is only considered valid when the FIFO has new data to provide. The data and its validity are then made available for further processing or output."
+      },
+      {
+        "signal": "eeprom_rw::idle2rd_req",
+        "description": "Acts as a control signal to initiate a read request from the idle state. When asserted, it triggers a transition to the read request state, allowing the system to prepare and execute a read operation. This control signal is activated based on specific conditions, such as the presence of a read enable signal, ensuring that the FSM moves to the appropriate state to handle the read process."
+      },
+      {
+        "signal": "eeprom_rw::rfifo_empty",
+        "description": "Acts as a state flag to indicate the availability of data in a FIFO buffer. When the FIFO is not empty, this flag triggers a read operation by setting a control signal. The control signal is used to enable data reading from the FIFO when the system is not busy. This ensures that data is only read when it is available and the system is ready to process it, preventing read operations on an empty FIFO and maintaining proper data flow synchronization."
+      },
+      {
+        "signal": "i2c_eeprom::key_in",
+        "description": "Serves as a data input to a debounce filter, providing the raw key signal that needs to be stabilized. The debounce filter processes this input to eliminate any noise or bouncing, ensuring a clean and stable output. The filter operates synchronously with the clock and includes a reset function to initialize its internal state. After a debounce period, if the input remains stable, the filtered output is generated, which is then used for further processing."
+      },
+      {
+        "signal": "i2c_eeprom::tx_busy",
+        "description": "Acts as a state flag to indicate the busy status of the UART transmitter. When asserted, it prevents new data from being loaded into the transmitter, ensuring that the current transmission completes without interference. This flag is used to synchronize and control the flow of data, ensuring that the transmitter processes one byte at a time and maintains the integrity of the serial communication."
+      },
+      {
+        "signal": "DCT::Data_U1_to_U0",
+        "description": "Acts as a data register to store and transfer information between different components. It holds the output from one processing unit and provides it as input to another, ensuring that data is correctly passed along the processing pipeline. The signal is used in conjunction with control signals to manage the flow of data, enabling synchronized and controlled data transfer within the system."
+      },
+      {
+        "signal": "DCT_1D::Start_Calc",
+        "description": "Acts as a control signal to initiate the 1D Discrete Cosine Transform (DCT) process. It is asserted to trigger the start of the DCT computation, coordinating with other control signals to manage the flow and timing of the data through the DCT data path. When this signal is active, it enables the processing of input data and sets the stage for the subsequent transformation and output of the processed data."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::End_Calc",
+        "description": "Acts as a control signal to initiate the processing and transmission of 8 parallel data streams. When asserted, it triggers the module to begin handling the incoming data, ultimately producing a single output data stream. This control signal synchronizes the start of the data processing with other system operations, ensuring that the output data is valid and ready for further use."
+      },
+      {
+        "signal": "Image::Row_Counter",
+        "description": "Serves as a state flag to track the progress of reading lines from a memory. It increments synchronously with the clock when specific conditions are met, such as the read enable being active and the lower bits of the read address matching a certain value. When the flag reaches its maximum value, it resets to zero, indicating that a complete set of 8 lines has been read. This flag ensures that the system cycles through a fixed number of lines before resetting, facilitating organized and controlled data access."
+      },
+      {
+        "signal": "Mem::Cache",
+        "description": "Acts as a data register to store and synchronize incoming data. It captures and holds the input data on the rising edge of the clock signal, ensuring that the stored value is updated only when the reset is not active. This register is used to provide stable and synchronized data to other components, such as RAM modules, where it serves as the input data for memory write operations. The register ensures that the data is consistent and correctly timed for further processing and storage."
+      },
+      {
+        "signal": "cla_adder_4bit::g",
+        "description": "Acts as a generate signal in a carry-lookahead adder, indicating whether a carry is produced at a specific bit position. This signal is used to quickly propagate carry information through the adder, reducing the overall delay. It is combined with propagate signals and carry-in values from lower bit positions to determine the carry-out for higher bit positions, enabling faster addition operations compared to traditional ripple-carry adders."
+      },
+      {
+        "signal": "cla_adder_4bit::p",
+        "description": "Acts as a propagate signal in a carry-lookahead adder, which indicates whether a carry can pass through a specific bit position. This signal is used in conjunction with the generate signal to quickly determine the carry-out for higher bit positions, enabling faster carry propagation. By combining these signals from multiple bit positions, the adder can compute the final sum more efficiently, reducing the overall delay compared to a ripple-carry adder."
+      },
+      {
+        "signal": "cpu::wrreg_s5",
+        "description": "Acts as a state flag to indicate the target register for a write operation in the pipeline. It is used to determine if the data from a previous stage should be forwarded to the current stage to resolve data hazards. If the state flag matches the register being read in the current stage, it triggers the forwarding of data from the appropriate pipeline stage. This ensures that the correct data is available for operations, preventing stalls and maintaining the flow of instructions."
+      },
+      {
+        "signal": "cpu::regdst",
+        "description": "Acts as a control signal to determine the destination for register file writes. It is part of a set of control signals generated by a control unit based on the input opcode and other flags. This control signal, along with others, influences the data path by directing where the output data should be stored. The signal is captured and synchronized by a synchronous register, which holds the value until the next clock cycle, ensuring that the correct destination is selected for the register file during the execution of instructions."
+      },
+      {
+        "signal": "cpu::pc4",
+        "description": "Acts as a data register to store and update the program counter value incremented by 4. This register captures the input on the rising edge of the clock unless a hold signal is active, in which case it retains its current value. If a clear signal is asserted, the register resets to a default value. This functionality supports the management of the program counter or similar state-holding elements in a data path, ensuring that the correct address is available for the next stage of processing."
+      },
+      {
+        "signal": "cpu::stall_s1_s2",
+        "description": "Acts as a control signal to manage pipeline stalls. This signal is asserted when a memory read operation and specific input conditions are met, indicating that a stall should be performed to prevent data hazards. When active, it halts the program counter (PC) and other data registers, ensuring that the pipeline stages do not proceed with invalid or conflicting data. The signal is deasserted when no stall is needed, allowing the PC and data to update normally. This mechanism is crucial for maintaining correct data flow and synchronization in pipelined architectures."
+      },
+      {
+        "signal": "cpu::forward_a",
+        "description": "Acts as a control signal to manage data forwarding in a pipelined processor. It checks if the previous stages are writing to a register that the current stage needs to read. If a match is found, it sets the control signal to forward the data from the appropriate stage. This ensures that the correct data is available for the current operation, preventing data hazards. Additionally, it includes logic to detect load-use data hazards, where a memory read cannot be immediately forwarded due to timing constraints, and signals a stall to ensure proper data flow."
+      },
+      {
+        "signal": "im_cached::index",
+        "description": "Serves as a control signal to select and update specific data blocks. It determines which of the four blocks is updated with new data, including a valid bit, a tag, and memory data, based on its value and a ready condition. Additionally, it controls a multiplexer that selects one of the blocks for further processing. The selected block's data is either updated from memory if a ready signal is active or retained if not. This mechanism ensures that only the relevant block is modified and the correct data is used for subsequent operations."
+      },
+      {
+        "signal": "rc_adder::b",
+        "description": "Serves as an input to a half adder, which is a combinational logic circuit. This input, along with another input, undergoes an XOR operation to produce the sum output and an AND operation to generate the carry output. The half adder uses these operations to perform single-bit binary addition, providing the sum and indicating if there is a carry-out."
+      },
+      {
+        "signal": "aes::cs",
+        "description": "Acts as a control signal that enables or disables access to various registers and memory-mapped components within a combinational logic block. When asserted, it allows the logic to evaluate additional conditions, such as write commands or specific address ranges, to determine the appropriate operation. This includes enabling writes to configuration, key, or data registers, or selecting data for reading from predefined locations like status or result registers. Its role is pivotal in managing data flow and ensuring proper synchronization of operations based on external inputs. Without this signal, the logic remains inactive, preventing unintended register updates or data reads."
+      },
+      {
+        "signal": "altera_up_ps2::error_communication_timed_out",
+        "description": "Acts as a state flag to indicate when a communication error occurs due to a timeout. This flag is asserted during the command output phase if the system detects that the expected response has not been received within the allowed time frame. When triggered, it forces the finite state machine to transition to an end-of-transfer state, ensuring the system exits the current operation and resets properly. This mechanism helps maintain synchronization by preventing the system from stalling indefinitely in an active state. The flag works alongside other control signals to manage the sequence of operations, enabling robust error handling and recovery in communication protocols."
+      },
+      {
+        "signal": "altera_up_ps2::ps2_data_reg",
+        "description": "Acts as a data register to capture and store incoming information from an external communication interface. It is updated on clock edges and used to synchronize data sampling with the system clock, ensuring stable and reliable transfers. The stored value influences state transitions in a finite state machine, particularly when detecting specific conditions like the start of data reception or command transmission. By holding the current state of the input signal, it helps determine the appropriate action for the state machine, such as transitioning to a data processing state or remaining idle. This functionality supports the overall operation of managing communication sequences while maintaining proper timing and synchronization with external events."
+      },
+      {
+        "signal": "altera_up_ps2::start_receiving_data",
+        "description": "Acts as a control signal that triggers the initiation of data reception from an external communication interface. When activated, it enables the module to synchronize with an incoming clock signal and begin sampling data at specific edge transitions. This ensures proper timing and alignment with the asynchronous data stream. The signal plays a key role in coordinating the reception process, allowing the module to transition from a waiting state to actively capturing and storing incoming data. Once the data is received, it is made available for further processing, accompanied by a flag indicating the availability of new data. This functionality supports reliable data transfer in systems with asynchronous inputs."
+      },
+      {
+        "signal": "apb_mux2::apb_valid_dma",
+        "description": "Acts as a control signal that determines which input source is granted access to direct memory access. When active, it enables the selection of one set of inputs over another, ensuring proper data flow based on priority. This signal synchronizes with the clock to manage arbitration logic, allowing seamless switching between sources. Its state directly influences the propagation of address, data, and control signals, ensuring that the higher-priority source takes precedence when active. This mechanism supports efficient resource sharing by dynamically routing inputs based on runtime conditions, maintaining system integrity and avoiding conflicts."
+      },
+      {
+        "signal": "axi_wrap_ram::axi_awready",
+        "description": "Acts as a control signal that regulates the readiness of a write address channel in a communication interface. It is asserted based on synchronization between input validity and internal masking conditions, ensuring proper data flow between components. The signal plays a key role in enabling or disabling the acceptance of incoming write address requests, depending on the current state and reset conditions. Its behavior is tightly coupled with clock-driven logic, which updates related registers and counters to track performance metrics and manage timing intervals. By interacting with other control and data signals, it ensures synchronized operation and reliable event handling within the system."
+      },
+      {
+        "signal": "branch_predictor::prediction",
+        "description": "Acts as a state indicator for branch prediction outcomes in a pipelined processor. It determines the validity, target address, and control flow type of a predicted branch while also deciding whether the branch should be taken based on historical data. The signal integrates alignment checks and cache boundary conditions to manage delays and ensure accurate predictions. Updates to tracking structures are triggered when resolved branches are identified, enabling adaptive adjustments to prediction tables. This functionality supports efficient instruction fetching by guiding the pipeline on potential control flow changes, minimizing stalls, and improving overall execution performance."
+      },
+      {
+        "signal": "branch_predictor::btb_predict_delay",
+        "description": "Acts as a state indicator to manage delayed prediction values of branch history buffer. When a reset or flush condition occurs, it clears the stored values to ensure a clean state. During normal operation, it updates these values with current predictions unless a stall condition is active. This mechanism helps synchronize data flow by maintaining consistency between immediate and delayed predictions, ensuring downstream logic receives accurate information. The control logic also integrates pipeline management signals, dynamically adjusting behavior based on system conditions like stalls or flushes to maintain proper timing and data integrity."
+      },
+      {
+        "signal": "btb::is_reseting",
+        "description": "Acts as a state flag to indicate whether a reset operation is in progress. When active, it overrides other control paths to enforce a reset state by setting specific values for write enable signals, address, and data. This ensures that reset functionality takes precedence over other operations like updates or mispredict handling. The flag is managed through sequential logic, where it is asserted during a system reset and deasserted once an address counter reaches its maximum value. This mechanism supports synchronization of reset operations with the system clock while coordinating with a delayed write process. The flag's behavior ensures proper initialization and orderly progression of system states during reset conditions."
+      },
+      {
+        "signal": "AC701_Gen1x4If64::cfg_interrupt",
+        "description": "Acts as a control signal to indicate the presence of an interrupt condition. This signal is used to notify the system of events that require immediate attention, such as errors or specific data conditions. It is part of a larger interface that manages high-speed data transfer and channel arbitration, ensuring that critical events are promptly handled. The signal is asserted when an interrupt is generated, and it is typically used in conjunction with other control and status signals to manage the overall system behavior."
+      },
+      {
+        "signal": "AC701_Gen1x4If64::chnl_rx_off",
+        "description": "Acts as a state flag to indicate the offset within a data channel for received data. This flag is used to manage the position of data within a buffer, ensuring that incoming data is correctly aligned and stored. It influences the logic by providing a reference point for data alignment and helps in managing the flow of data across multiple channels, ensuring that each segment of data is placed in the correct location."
+      },
+      {
+        "signal": "AC701_Gen1x4If64::s_axis_tx_tready",
+        "description": "Acts as a control signal to manage data flow in a high-speed data transfer module. This signal is used to indicate the readiness of the receiving end to accept new data, thus controlling when the transmitting end can send data. It ensures that data is only transferred when the receiver is ready, preventing data loss or corruption. The signal plays a crucial role in synchronizing the data transfer process between different components, maintaining the integrity and efficiency of the data flow."
+      },
+      {
+        "signal": "AC701_Gen2x4If128::user_clk",
+        "description": "Serves as a clock signal to synchronize the operations within the high-speed data transfer module. It ensures that all data and control signals are processed in a coordinated manner, maintaining the timing and sequence of transactions across multiple channels. This clock signal is essential for the proper functioning of the module, enabling it to manage data transmission and reception, flow control, and interrupt handling efficiently."
+      },
+      {
+        "signal": "AC701_Gen2x4If128::chnl_rx_clk",
+        "description": "Serves as a clock signal to synchronize the reception of data across multiple channels. It ensures that the data is latched and processed at the correct times, maintaining the integrity and timing of the data transfer. This clock signal is essential for coordinating the operations of the receive channels, ensuring that data is handled in a timely and synchronized manner."
+      },
+      {
+        "signal": "AC701_Gen2x4If128::chnl_tx_last",
+        "description": "Acts as a state flag to indicate the end of a data packet in a high-speed data transfer module. This flag is used to signal the last piece of data in a transmission, ensuring that the receiving end can properly handle the completion of the data packet. It is part of a larger system that manages multiple channels and supports flow control, channel-specific data, and interrupt handling, all while synchronizing operations with clock and reset signals."
+      },
+      {
+        "signal": "ADM7V3_Gen3x4If128::cfg_rcb_status",
+        "description": "Acts as a state flag to indicate the status of the root complex base (RCB) in the PCIe interface. It provides information about the current state or condition of the RCB, which is crucial for managing and monitoring the communication between the user logic and the PCIe bus. This flag helps in diagnosing and handling errors, ensuring that the system operates correctly and efficiently."
+      },
+      {
+        "signal": "DE4Gen1x8If64::chnl_tx_ack",
+        "description": "Acts as a control signal to acknowledge the completion of data transmission on multiple channels. It is used to indicate that the transmitted data has been successfully received and processed, allowing the system to manage the flow of data and ensure proper synchronization between the transmitter and receiver. This control signal is essential for maintaining the integrity and reliability of data transfer operations in high-speed communication interfaces."
+      },
+      {
+        "signal": "DE4Gen1x8If64::tx_st_eop0",
+        "description": "Acts as a control signal to indicate the end of a packet in the data transmission. It is asserted when the last piece of data in a packet is being sent, signaling the receiver to prepare for the next packet or to finalize the current transaction. This state flag ensures that the data stream is properly segmented and that each packet is correctly identified and processed."
+      },
+      {
+        "signal": "DE4Gen2x8If128::app_msi_req",
+        "description": "Acts as a control signal to request the generation of a Message Signaled Interrupt (MSI). This signal is used to notify the system of an event that requires attention, such as the completion of a data transfer or an error condition. When asserted, it triggers the handling of the interrupt, allowing the system to respond appropriately. The acknowledgment of this request is managed by another control signal, ensuring that the interrupt is processed and the system can continue with its operations."
+      },
+      {
+        "signal": "arbiter::mask_next",
+        "description": "Acts as a state flag to manage the priority and validity of requests in an arbitration mechanism. It retains the current state if a granted request is still active or not yet acknowledged. For new valid requests, it updates the grant and encoded grant signals. The state flag is also used to update a mask that reflects the priority of the next request, which can be shifted left or right based on the priority configuration. This ensures that the arbitration logic correctly handles different types of requests and maintains the correct state across clock cycles."
+      },
+      {
+        "signal": "arbiter::masked_request_index",
+        "description": "Serves as a state flag to indicate the encoded index of the highest priority active request after applying a mask. This flag is part of a priority encoder that processes masked inputs, and it outputs the encoded position of the highest priority request. The presence of a valid request is also indicated by an accompanying validity flag."
+      },
+      {
+        "signal": "arbiter::grant_encoded_reg",
+        "description": "Acts as a data register to store encoded grant information. It is updated synchronously on the rising edge of the clock with new values. If a reset condition is detected, this register is cleared to zero, ensuring the system can return to a known initial state. This functionality is crucial for maintaining consistent and reliable data flow, especially during initialization or error recovery."
+      },
+      {
+        "signal": "axis_arb_mux::s_axis_tready",
+        "description": "Serves as a control signal to manage data capture from multiple input channels. When active, it triggers the registration of input data, keep, valid, last, ID, destination, and user signals into corresponding registers. This ensures that data is only updated when the channel is ready, maintaining synchronization and preventing data corruption. The reset functionality clears the valid signals, allowing the system to be initialized or reset to a known state."
+      },
+      {
+        "signal": "axis_arb_mux::s_axis_tdata",
+        "description": "Serves as a data register to store incoming information from multiple channels. The data is captured and stored when the corresponding control signal indicates readiness, ensuring synchronized data propagation. This process updates the stored data on each clock cycle. A reset mechanism is also in place to clear the valid state of all channels, allowing the system to return to a known initial state."
+      },
+      {
+        "signal": "axis_async_fifo_adapter::s_status_overflow",
+        "description": "Acts as a state flag to indicate when the FIFO buffer has exceeded its capacity. This flag is used to signal an overflow condition, which can help in managing data flow and preventing data loss. When asserted, it informs the system that the buffer cannot accept more data, prompting potential corrective actions such as pausing the input or handling the overflow event."
+      },
+      {
+        "signal": "axis_async_fifo_adapter::m_status_depth_commit",
+        "description": "Serves as a status flag to indicate the commitment of data depth in the FIFO. This flag is used to signal when the current depth of the FIFO has been successfully updated, providing feedback on the internal state of the buffer. It helps in managing the flow control and ensures that the system can monitor and react to the current storage capacity, which is crucial for maintaining data integrity and preventing overflow."
+      },
+      {
+        "signal": "axis_async_fifo_adapter::m_status_bad_frame",
+        "description": "Acts as a status flag to indicate the presence of a corrupted or invalid frame in the data stream. This flag is used to signal issues with the frame integrity, which can be caused by errors during transmission or processing. It helps in monitoring and maintaining the quality of the data being transferred, allowing higher-level logic to take corrective actions if necessary."
+      },
+      {
+        "signal": "arp::incoming_arp_htype",
+        "description": "Acts as a data register to store the hardware type of an incoming ARP frame. This value is used to validate the frame and determine if it conforms to the expected ARP format. When the hardware type matches the expected value, it triggers further processing, such as updating the cache with sender addresses and generating appropriate ARP responses. If the hardware type is not as expected, the frame is not processed, and the system waits for the next valid frame."
+      },
+      {
+        "signal": "arp::arp_request_ready_next",
+        "description": "Acts as a control signal to indicate the readiness for processing ARP lookup requests. It is de-asserted when an ARP request operation is in progress, and re-asserted when the operation is complete or no response is valid. This signal helps coordinate the timing of ARP request handling, ensuring that new requests are not processed until the current one is finished or timed out."
+      },
+      {
+        "signal": "arp::s_eth_payload_axis_tready",
+        "description": "Acts as a control signal to indicate the readiness of the downstream module to accept data from the Ethernet payload. This signal is used to synchronize data flow, ensuring that data is only transferred when the receiving module is ready to process it. It helps in managing the handshake between the sending and receiving components, preventing data loss or overflow."
+      },
+      {
+        "signal": "arp_cache::mac_addr_mem",
+        "description": "Serves as a data register to store MAC addresses. It is updated during write operations and accessed during read operations. The register is part of a larger state machine that manages the storage and retrieval of MAC addresses, ensuring that the correct MAC address is fetched based on the current read pointer. During a write, the MAC address is stored at the location indicated by the write pointer, and during a read, the MAC address is retrieved from the location indicated by the read pointer."
+      },
+      {
+        "signal": "arp_cache::rd_ptr_next",
+        "description": "Acts as a state indicator to manage the read position in a cache system. It is updated based on the current state and incoming requests, ensuring that the correct data is accessed for processing. The signal is crucial for synchronizing the read operations and maintaining the integrity of the cache by pointing to the next valid entry. During a query or write request, it is set to the hash of the request, and it is also reset during a cache clear operation."
+      }
+  
+]

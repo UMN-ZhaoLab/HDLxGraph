@@ -1,0 +1,742 @@
+[
+  {
+    "module_id": "DCT",
+    "block_descriptions": [
+      {
+        "code": "DCT_1D #(8) DCT_1D_1(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.En_In(En_In),\n.Data_In(In_Data),\n.En_Out(En_U0_to_U1),\n.Data_Out(Data_U0_to_U1)\n);\n\n//U1    Instantiate Mem module\n",
+        "description": "This code block instantiates a module named DCT_1D, which is likely part of a larger system for performing a 1D Discrete Cosine Transform. The module has inputs for a clock signal, an active-low reset, an enable signal, and input data. It also has outputs for an enable signal and transformed data. The module processes the input data when enabled and provides the transformed output, possibly after some internal processing or transformation steps."
+      },
+      {
+        "code": "Mem Mem(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.In_Data(Data_U0_to_U1),\n.En_In(En_U0_to_U1),\n.Out_Data(Data_U1_to_U0),\n.En_Out(En_U1_to_U2)\n);\n\n//U2    Instantiate DCT_1D_2 module\n",
+        "description": "This code block instantiates a memory module that interfaces with other components. It includes a clock and reset signal for synchronization and control. The memory module receives input data and an enable signal from one component, and it outputs data and an enable signal to another component. The general function is to store and retrieve data based on the control signals, facilitating data transfer between different parts of the system."
+      },
+      {
+        "code": "DCT_1D #(10) DCT_1D_2(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.En_In(En_U1_to_U2),\n.Data_In(Data_U1_to_U0),\n.En_Out(En_Out),\n.Data_Out(Out_Data)\n);\n\nendmodule ",
+        "description": "This code instantiates a 10-bit 1D Discrete Cosine Transform (DCT) module. It processes input data and produces transformed output data. The module is controlled by a clock signal, which synchronizes the operations, and a reset signal, which initializes the module. An enable input controls when the module should process new data. When enabled, the module takes input data, performs the DCT, and outputs the transformed data. The enable output indicates when the transformed data is ready."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "DCT::En_Out",
+        "description": "Acts as a control signal to indicate when the transformed data is ready for output. This signal is asserted after the processing is complete, ensuring that the downstream components only use the data when it is valid and fully processed. It synchronizes the data flow by signaling the readiness of the output, which is crucial for maintaining the correct sequence of operations in the data processing pipeline."
+      },
+      {
+        "signal": "DCT::Data_U0_to_U1",
+        "description": "Serves as a data path to transfer processed information between modules. It carries the output from one processing stage to the input of a memory module, enabling the storage and subsequent retrieval of the transformed data. This signal is crucial for maintaining the flow of data through the system, ensuring that each component receives the necessary information at the appropriate time."
+      },
+      {
+        "signal": "DCT::En_U1_to_U2",
+        "description": "Acts as a control signal to manage data processing and transfer between components. This signal is used to enable the input of data into a 1D Discrete Cosine Transform (DCT) module, which processes the data and outputs the transformed result. When asserted, it allows the DCT module to accept new input data, perform the transformation, and then indicate when the output data is ready for further use in the system."
+      },
+      {
+        "signal": "DCT::Out_Data",
+        "description": "Serves as a data register to store the output of a processing module. It holds the transformed data after the module processes the input, which is then available for further use or transmission. The data becomes valid and ready for access when an associated control signal indicates completion of the transformation process."
+      },
+      {
+        "signal": "DCT::Clock",
+        "description": "The signal acts as a synchronization control for the entire system, ensuring that all operations are coordinated and occur at the correct times. It triggers the processing and data transfer between different modules, such as the DCT and memory components. This control signal is essential for maintaining the timing and sequence of operations, enabling the system to function correctly and efficiently."
+      },
+      {
+        "signal": "DCT::Data_U1_to_U0",
+        "description": "Acts as a data register to store and transfer information between different components. It holds the output from one processing unit and provides it as input to another, ensuring that data is correctly passed along the processing pipeline. The signal is used in conjunction with control signals to manage the flow of data, enabling synchronized and controlled data transfer within the system."
+      },
+      {
+        "signal": "DCT::En_U0_to_U1",
+        "description": "Acts as a control signal to manage data transfer between processing modules. It is asserted to indicate that the data from the previous module is ready and valid for further processing. This signal synchronizes the flow of data, ensuring that the next module in the pipeline receives the data at the appropriate time, thus maintaining the integrity and timing of the data processing sequence."
+      },
+      {
+        "signal": "DCT::In_Data",
+        "description": "Serves as a data register to provide input values to the DCT_1D module. When the enable signal is asserted, this register supplies the necessary data for the transformation process. The data is processed internally by the DCT_1D module and the transformed result is then available at the output."
+      },
+      {
+        "signal": "DCT::Reset_n",
+        "description": "The signal acts as a state flag to initialize and reset the modules in the system. It is used to bring the modules to a known initial state, ensuring that all internal states and outputs are set to their default values. This state flag is crucial for maintaining the correct operation of the system, particularly after power-up or when a restart is needed. When de-asserted, it triggers the reset process across the DCT and memory modules, preparing them for subsequent operations."
+      },
+      {
+        "signal": "DCT::En_In",
+        "description": "Acts as a control signal to initiate the processing of input data within the DCT module. When asserted, it enables the module to accept and process the incoming data, facilitating the start of the transformation process. This signal ensures that the data is only processed under valid and intended conditions, synchronizing the operation with the rest of the system."
+      }
+    ],
+    "module_description": "This module performs a 1D Discrete Cosine Transform (DCT) on input data. It processes the data when enabled and outputs the transformed result, which is useful for applications such as signal processing and image compression. The module is synchronized by a clock signal and can be reset to an initial state. It signals when the transformed data is ready, facilitating the integration of DCT processing into a larger system workflow."
+  },
+  {
+    "module_id": "DCT_1D",
+    "block_descriptions": [
+      {
+        "code": "DCT_1D_Data_Path #(WIDTH) DCT_1D_1_Data_Path(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.Sele(Sele),\n.In_Data(Data_In),\n.En_In(En_In),\n.End_Calc(End_Calc),\n.Start_Calc(Start_Calc),\n.Out_Data(Data_Out),\n.En_Out(En_Out)\n);\n\n//U1    Instantiate DCT_1D_1_Control_Unit module\n",
+        "description": "This code instantiates a data path module for a 1D Discrete Cosine Transform (DCT) with configurable width. It interfaces with a control unit to process input data and produce output data. The data path is controlled by signals such as a clock, reset, selection, enable, and start/end of calculation. It processes the input data when enabled and provides the transformed output data when the processing is complete. The control signals manage the flow and timing of the data through the DCT process."
+      },
+      {
+        "code": "DCT_1D_Control_Unit Control_Unit(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.Sele(Sele),\n.End_Calc(End_Calc),\n.Start_Calc(Start_Calc)\n);\n\nendmodule ",
+        "description": "This code describes a control unit for a 1D Discrete Cosine Transform (DCT) process. It is a sequential logic block that manages the DCT computation flow. The control unit receives a clock signal, a reset signal, and control flags to start and end the calculation. It also outputs a selection signal to direct the data path. The unit coordinates the DCT computation by initiating and terminating the process based on the input control signals, ensuring proper timing and sequence of operations."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "DCT_1D::Reset_n",
+        "description": "Acts as a control signal to initialize and reset the DCT process. It is used to bring the system to a known initial state, ensuring that all internal registers and states are cleared before starting a new computation. When de-asserted, it halts the ongoing operations and resets the data path and control unit, preparing them for a fresh start. This signal is crucial for maintaining the integrity and synchronization of the DCT process."
+      },
+      {
+        "signal": "DCT_1D::Data_In",
+        "description": "Serves as a data register to hold input values for processing. It is part of the data path in a 1D Discrete Cosine Transform (DCT) module, which processes these values under the control of various signals. The data register receives and stores the input data, which is then processed when the enable and start calculation signals are asserted. After the transformation, the output data is available and can be retrieved. The control signals manage the flow and timing of the data through the DCT process, ensuring that the input data is correctly handled and transformed."
+      },
+      {
+        "signal": "DCT_1D::End_Calc",
+        "description": "Acts as a state flag to indicate the completion of a computation. It is used to signal the end of the DCT process, allowing the control unit to manage the timing and sequence of operations. When this flag is asserted, it triggers the termination of the current calculation, and the control unit can then proceed with subsequent steps or reset the system for the next computation. This ensures that the data path processes are synchronized and completed before moving on to the next task."
+      },
+      {
+        "signal": "DCT_1D::En_Out",
+        "description": "Acts as a control signal to manage the output data flow in a 1D Discrete Cosine Transform (DCT) process. It is asserted when the data processing is complete, allowing the transformed data to be released and used by subsequent stages. This signal ensures that the output data is valid and synchronized with the overall system timing, coordinating with other control signals to maintain proper data flow and processing."
+      },
+      {
+        "signal": "DCT_1D::Clock",
+        "description": "Serves as a timing signal to synchronize the operations of both the data path and control units in the DCT process. It ensures that all actions, such as starting and ending the computation, are performed at the correct intervals. The timing signal is crucial for coordinating the flow and sequence of the DCT, maintaining the proper timing for data processing and control signal management."
+      },
+      {
+        "signal": "DCT_1D::Data_Out",
+        "description": "Serves as a data register to store the output of the 1D Discrete Cosine Transform process. It holds the transformed data after the processing is complete and is ready to be read by subsequent stages or modules. The control signals, including clock, reset, and enable, manage when this data register is updated and made available, ensuring proper synchronization and flow of data through the system."
+      },
+      {
+        "signal": "DCT_1D::En_In",
+        "description": "Acts as a control signal to manage the flow of input data into the DCT data path. It is asserted to allow the processing of new input data, ensuring that the data is only processed when valid and ready. This signal synchronizes the input data with the internal state of the DCT process, coordinating with other control signals to maintain proper timing and sequence during the transformation."
+      },
+      {
+        "signal": "DCT_1D::Sele",
+        "description": "Acts as a control signal to direct the data path in a 1D Discrete Cosine Transform (DCT) process. This signal is generated by the control unit and used to manage the flow of data through the DCT data path. It determines when and how the input data should be processed, coordinating with other control signals to ensure that the DCT computation is performed correctly and efficiently. The control signal plays a crucial role in synchronizing the operations and maintaining the proper sequence during the DCT calculation."
+      },
+      {
+        "signal": "DCT_1D::Start_Calc",
+        "description": "Acts as a control signal to initiate the 1D Discrete Cosine Transform (DCT) process. It is asserted to trigger the start of the DCT computation, coordinating with other control signals to manage the flow and timing of the data through the DCT data path. When this signal is active, it enables the processing of input data and sets the stage for the subsequent transformation and output of the processed data."
+      }
+    ],
+    "module_description": "This module implements a control unit for a 1D Discrete Cosine Transform (DCT) process. It manages the DCT computation by coordinating the timing and sequence of operations. The control unit interfaces with a data path to initiate and terminate the DCT based on input control signals, ensuring that the data is processed correctly and efficiently. It uses a clock and reset signal to manage the flow and provides a selection signal to direct the data path, thereby orchestrating the entire DCT computation."
+  },
+  {
+    "module_id": "DCT_1D_Data_Path",
+    "block_descriptions": [
+      {
+        "code": "Receive_8_Pixel #(WIDTH) Receive_8_Pixel(\n.Clock( Clock ),\n.Reset_n( Reset_n ),\n.Data_In( In_Data ),\n.En_In( En_In ),\n.Out_Pixel_0( Receive_8_Pixel_to_Adder_1_In_Pixel_0 ),\n.Out_Pixel_1( Receive_8_Pixel_to_Adder_1_In_Pixel_1 ),\n.Out_Pixel_2( Receive_8_Pixel_to_Adder_1_In_Pixel_2 ),\n.Out_Pixel_3( Receive_8_Pixel_to_Adder_1_In_Pixel_3 ),\n.Out_Pixel_4( Receive_8_Pixel_to_Adder_1_In_Pixel_4 ),\n.Out_Pixel_5( Receive_8_Pixel_to_Adder_1_In_Pixel_5 ),\n.Out_Pixel_6( Receive_8_Pixel_to_Adder_1_In_Pixel_6 ),\n.Out_Pixel_7( Receive_8_Pixel_to_Adder_1_In_Pixel_7 ),\n.En_Out(Start_Calc)\n);\n\n",
+        "description": "This module implements a data reception and distribution unit for 8 parallel data streams. It operates synchronously, controlled by a clock signal and an active-low reset. When the enable input is asserted, it captures input data and distributes it to 8 output channels. The module also provides an enable output to indicate when the data is ready for further processing, such as in a subsequent calculation stage."
+      },
+      {
+        "code": "Adder_1 #(WIDTH) Adder_1(\n.In_Pixel_0( Receive_8_Pixel_to_Adder_1_In_Pixel_0 ),\n.In_Pixel_1( Receive_8_Pixel_to_Adder_1_In_Pixel_1 ),\n.In_Pixel_2( Receive_8_Pixel_to_Adder_1_In_Pixel_2 ),\n.In_Pixel_3( Receive_8_Pixel_to_Adder_1_In_Pixel_3 ),\n.In_Pixel_4( Receive_8_Pixel_to_Adder_1_In_Pixel_4 ),\n.In_Pixel_5( Receive_8_Pixel_to_Adder_1_In_Pixel_5 ),\n.In_Pixel_6( Receive_8_Pixel_to_Adder_1_In_Pixel_6 ),\n.In_Pixel_7( Receive_8_Pixel_to_Adder_1_In_Pixel_7 ),\n.Data_0_Add_7( Data_0_Add_7_to_D_Flip_Flop_1_0 ),\n.Data_0_Sub_7( Data_0_Sub_7_to_D_Flip_Flop_1_1 ),\n.Data_1_Add_6( Data_1_Add_6_to_D_Flip_Flop_1_2 ),\n.Data_1_Sub_6( Data_1_Sub_6_to_D_Flip_Flop_1_3 ),\n.Data_2_Add_5( Data_2_Add_5_to_D_Flip_Flop_1_4 ),\n.Data_2_Sub_5( Data_2_Sub_5_to_D_Flip_Flop_1_5 ),\n.Data_3_Add_4( Data_3_Add_4_to_D_Flip_Flop_1_6 ),\n.Data_3_Sub_4( Data_3_Sub_4_to_D_Flip_Flop_1_7 )\n);\n\n",
+        "description": "This code instantiates an adder module that processes multiple input data streams. It takes eight input pixels and performs both addition and subtraction operations on specific pairs of these inputs. The results of these operations are then directed to different output signals, which are likely connected to flip-flops for storage or further processing. The adder module is parameterized by a width, suggesting it can handle data of varying bit widths, making it flexible for different applications."
+      },
+      {
+        "code": "DCT_1D_D_Flip_Flop_1 #(WIDTH) D_Flip_Flop_1(\n.Clock( Clock ),\n.Reset_n( Reset_n ),\n.In_Data_0( Data_0_Add_7_to_D_Flip_Flop_1_0 ),\n.In_Data_1( Data_0_Sub_7_to_D_Flip_Flop_1_1 ),\n.In_Data_2( Data_1_Add_6_to_D_Flip_Flop_1_2 ),\n.In_Data_3( Data_1_Sub_6_to_D_Flip_Flop_1_3 ),\n.In_Data_4( Data_2_Add_5_to_D_Flip_Flop_1_4 ),\n.In_Data_5( Data_2_Sub_5_to_D_Flip_Flop_1_5 ),\n.In_Data_6( Data_3_Add_4_to_D_Flip_Flop_1_6 ),\n.In_Data_7( Data_3_Sub_4_to_D_Flip_Flop_1_7 ),\n.Data_0_Add_7(D_Flip_Flop_1_Seler_4_to_1_0),\n.Data_0_Sub_7(D_Flip_Flop_1_Seler_4_to_1_1),\n.Data_1_Add_6(D_Flip_Flop_1_Seler_4_to_1_2),\n.Data_1_Sub_6(D_Flip_Flop_1_Seler_4_to_1_3),\n.Data_3_Add_4(D_Flip_Flop_1_Seler_4_to_1_4),\n.Data_3_Sub_4(D_Flip_Flop_1_Seler_4_to_1_5),\n.Data_2_Add_5(D_Flip_Flop_1_Seler_4_to_1_6),\n.Data_2_Sub_5(D_Flip_Flop_1_Seler_4_to_1_7)\n);\n\n",
+        "description": "This code implements a synchronous D flip-flop with multiple data inputs and a multiplexer for data selection. It captures and stores data on the rising edge of the clock signal, and it can be reset by an active-low reset signal. The flip-flop receives several data inputs, and a multiplexer selects which input to store based on control signals. The stored data is then output to different destinations, providing a way to synchronize and select data in a digital system."
+      },
+      {
+        "code": "Selector_4_to_1 #(WIDTH) Selector_4_to_1(\n.Sele(Sele),\n.Data_0_Add_7(D_Flip_Flop_1_Seler_4_to_1_0),\n.Data_0_Sub_7(D_Flip_Flop_1_Seler_4_to_1_1),\n.Data_1_Add_6(D_Flip_Flop_1_Seler_4_to_1_2),\n.Data_1_Sub_6(D_Flip_Flop_1_Seler_4_to_1_3),\n.Data_3_Add_4(D_Flip_Flop_1_Seler_4_to_1_4),\n.Data_3_Sub_4(D_Flip_Flop_1_Seler_4_to_1_5),\n.Data_2_Add_5(D_Flip_Flop_1_Seler_4_to_1_6),\n.Data_2_Sub_5(D_Flip_Flop_1_Seler_4_to_1_7),\n.Out_Add_Data(Selector_4_to_1_to_Mult_Add),\n.Out_Sub_Data(Selector_4_to_1_to_Mult_Sub)\n);\n\n",
+        "description": "This code implements a 4-to-1 multiplexer with two outputs. It selects between four input data sources based on a control signal and routes the selected data to two separate output paths. The multiplexer takes in eight data inputs, which are grouped into four pairs, and a selection signal. Depending on the value of the selection signal, one of the four pairs is chosen and directed to the two output paths, effectively allowing for flexible data routing within the system."
+      },
+      {
+        "code": "Multiplier #(WIDTH) Multiplier(\n.Data_Add(Selector_4_to_1_to_Mult_Add),\n.Data_Sub(Selector_4_to_1_to_Mult_Sub),\n.Out_Data_Add_A(Mult_to_Selector_1_to_4_Add_A),\n.Out_Data_Add_C(Mult_to_Selector_1_to_4_Add_C),\n.Out_Data_Add_F(Mult_to_Selector_1_to_4_Add_F),\n.Out_Data_Sub_B(Mult_to_Selector_1_to_4_Sub_B),\n.Out_Data_Sub_D(Mult_to_Selector_1_to_4_Sub_D),\n.Out_Data_Sub_E(Mult_to_Selector_1_to_4_Sub_E),\n.Out_Data_Sub_G(Mult_to_Selector_1_to_4_Sub_G)\n);\n\n",
+        "description": "This code block instantiates a multiplier module, which performs arithmetic operations on input data. It receives two sets of input data, one for addition and one for subtraction, from a 4-to-1 selector. The multiplier processes these inputs and generates multiple output data streams, each directed to a 1-to-4 selector. These outputs are used for further processing or distribution in the system. The multiplier is configured with a specific bit width, allowing it to handle data of that size."
+      },
+      {
+        "code": "Selector_1_to_4 #(WIDTH) Selector_1_to_4(\n.Sele(Sele),\n.Data_Add_A(Mult_to_Selector_1_to_4_Add_A),\n.Data_Add_C(Mult_to_Selector_1_to_4_Add_C),\n.Data_Add_F(Mult_to_Selector_1_to_4_Add_F),\n.Data_Sub_B(Mult_to_Selector_1_to_4_Sub_B),\n.Data_Sub_D(Mult_to_Selector_1_to_4_Sub_D),\n.Data_Sub_E(Mult_to_Selector_1_to_4_Sub_E),\n.Data_Sub_G(Mult_to_Selector_1_to_4_Sub_G),\n.Data_0_Add_7_A(Data_0_Add_7_A),\n.Data_0_Add_7_C(Data_0_Add_7_C),\n.Data_0_Add_7_F(Data_0_Add_7_F),\n.Data_0_Sub_7_B(Data_0_Sub_7_B),\n.Data_0_Sub_7_D(Data_0_Sub_7_D),\n.Data_0_Sub_7_E(Data_0_Sub_7_E),\n.Data_0_Sub_7_G(Data_0_Sub_7_G),\n.Data_1_Add_6_A(Data_1_Add_6_A),\n.Data_1_Add_6_C(Data_1_Add_6_C),\n.Data_1_Add_6_F(Data_1_Add_6_F),\n.Data_1_Sub_6_B(Data_1_Sub_6_B),\n.Data_1_Sub_6_D(Data_1_Sub_6_D),\n.Data_1_Sub_6_E(Data_1_Sub_6_E),\n.Data_1_Sub_6_G(Data_1_Sub_6_G),\n.Data_2_Add_5_A(Data_2_Add_5_A),\n.Data_2_Add_5_C(Data_2_Add_5_C),\n.Data_2_Add_5_F(Data_2_Add_5_F),\n.Data_2_Sub_5_B(Data_2_Sub_5_B),\n.Data_2_Sub_5_D(Data_2_Sub_5_D),\n.Data_2_Sub_5_E(Data_2_Sub_5_E),\n.Data_2_Sub_5_G(Data_2_Sub_5_G),\n.Data_3_Add_4_A(Data_3_Add_4_A),\n.Data_3_Add_4_C(Data_3_Add_4_C),\n.Data_3_Add_4_F(Data_3_Add_4_F),\n.Data_3_Sub_4_B(Data_3_Sub_4_B),\n.Data_3_Sub_4_D(Data_3_Sub_4_D),\n.Data_3_Sub_4_E(Data_3_Sub_4_E),\n.Data_3_Sub_4_G(Data_3_Sub_4_G)\n);\n\n",
+        "description": "This code implements a multiplexer that selects one of four data paths based on a control signal. The multiplexer has multiple input data signals, each corresponding to different operations (addition and subtraction) and various data sources. The control signal determines which of the four data paths is selected for output. Each data path includes several data inputs, and the multiplexer routes the appropriate set of data based on the control signal, effectively managing data flow in a system with multiple operational modes."
+      },
+      {
+        "code": "Adder_2 #(WIDTH) Adder_2(\n.Data_0_Add_7_A(Data_0_Add_7_A),\n.Data_0_Add_7_C(Data_0_Add_7_C),\n.Data_0_Add_7_F(Data_0_Add_7_F),\n.Data_0_Sub_7_B(Data_0_Sub_7_B),\n.Data_0_Sub_7_D(Data_0_Sub_7_D),\n.Data_0_Sub_7_E(Data_0_Sub_7_E),\n.Data_0_Sub_7_G(Data_0_Sub_7_G),\n.Data_1_Add_6_A(Data_1_Add_6_A),\n.Data_1_Add_6_C(Data_1_Add_6_C),\n.Data_1_Add_6_F(Data_1_Add_6_F),\n.Data_1_Sub_6_B(Data_1_Sub_6_B),\n.Data_1_Sub_6_D(Data_1_Sub_6_D),\n.Data_1_Sub_6_E(Data_1_Sub_6_E),\n.Data_1_Sub_6_G(Data_1_Sub_6_G),\n.Data_2_Add_5_A(Data_2_Add_5_A),\n.Data_2_Add_5_C(Data_2_Add_5_C),\n.Data_2_Add_5_F(Data_2_Add_5_F),\n.Data_2_Sub_5_B(Data_2_Sub_5_B),\n.Data_2_Sub_5_D(Data_2_Sub_5_D),\n.Data_2_Sub_5_E(Data_2_Sub_5_E),\n.Data_2_Sub_5_G(Data_2_Sub_5_G),\n.Data_3_Add_4_A(Data_3_Add_4_A),\n.Data_3_Add_4_C(Data_3_Add_4_C),\n.Data_3_Add_4_F(Data_3_Add_4_F),\n.Data_3_Sub_4_B(Data_3_Sub_4_B),\n.Data_3_Sub_4_D(Data_3_Sub_4_D),\n.Data_3_Sub_4_E(Data_3_Sub_4_E),\n.Data_3_Sub_4_G(Data_3_Sub_4_G),\n.Out_Data_0(Adder_2_to_D_Flip_Flop_2_0),\n.Out_Data_1(Adder_2_to_D_Flip_Flop_2_1),\n.Out_Data_2(Adder_2_to_D_Flip_Flop_2_2),\n.Out_Data_3(Adder_2_to_D_Flip_Flop_2_3),\n.Out_Data_4(Adder_2_to_D_Flip_Flop_2_4),\n.Out_Data_5(Adder_2_to_D_Flip_Flop_2_5),\n.Out_Data_6(Adder_2_to_D_Flip_Flop_2_6),\n.Out_Data_7(Adder_2_to_D_Flip_Flop_2_7)\n);\n\n",
+        "description": "This code instantiates a parameterized adder module that performs multiple addition and subtraction operations. It takes several input data signals, which are grouped into pairs for addition and subtraction. The adder processes these inputs and generates corresponding output data. The outputs are then connected to the inputs of D flip-flops, which will store the results on the next clock edge. This setup is typically used in arithmetic logic units (ALUs) or similar data processing blocks where multiple operations need to be performed in parallel."
+      },
+      {
+        "code": "DCT_1D_D_Flip_Flop_2 #(WIDTH) D_Flip_Flop_2(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.In_Data_0(Adder_2_to_D_Flip_Flop_2_0),\n.In_Data_1(Adder_2_to_D_Flip_Flop_2_1),\n.In_Data_2(Adder_2_to_D_Flip_Flop_2_2),\n.In_Data_3(Adder_2_to_D_Flip_Flop_2_3),\n.In_Data_4(Adder_2_to_D_Flip_Flop_2_4),\n.In_Data_5(Adder_2_to_D_Flip_Flop_2_5),\n.In_Data_6(Adder_2_to_D_Flip_Flop_2_6),\n.In_Data_7(Adder_2_to_D_Flip_Flop_2_7),\n.Out_Data_0(D_Flip_Flop_2_to_Send_8_Pixel_0),\n.Out_Data_1(D_Flip_Flop_2_to_Send_8_Pixel_1),\n.Out_Data_2(D_Flip_Flop_2_to_Send_8_Pixel_2),\n.Out_Data_3(D_Flip_Flop_2_to_Send_8_Pixel_3),\n.Out_Data_4(D_Flip_Flop_2_to_Send_8_Pixel_4),\n.Out_Data_5(D_Flip_Flop_2_to_Send_8_Pixel_5),\n.Out_Data_6(D_Flip_Flop_2_to_Send_8_Pixel_6),\n.Out_Data_7(D_Flip_Flop_2_to_Send_8_Pixel_7)\n);\n\n",
+        "description": "This code implements a synchronous data storage element, specifically an 8-bit wide D flip-flop. It captures and holds input data on the rising edge of the clock signal. The flip-flop has a reset functionality, which, when active, sets all output data to a known initial state. The module receives eight input data signals from an adder and outputs these values to another module after being synchronized with the clock. This ensures that the data is stable and aligned with the system's timing requirements."
+      },
+      {
+        "code": "Send_8_Pixel #(WIDTH) Send_8_Pixel(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.In_Data_0(D_Flip_Flop_2_to_Send_8_Pixel_0),\n.In_Data_1(D_Flip_Flop_2_to_Send_8_Pixel_1),\n.In_Data_2(D_Flip_Flop_2_to_Send_8_Pixel_2),\n.In_Data_3(D_Flip_Flop_2_to_Send_8_Pixel_3),\n.In_Data_4(D_Flip_Flop_2_to_Send_8_Pixel_4),\n.In_Data_5(D_Flip_Flop_2_to_Send_8_Pixel_5),\n.In_Data_6(D_Flip_Flop_2_to_Send_8_Pixel_6),\n.In_Data_7(D_Flip_Flop_2_to_Send_8_Pixel_7),\n.Out_Data(Out_Data),\n.Start(End_Calc),\n.En_Out(En_Out)\n);\n\nendmodule",
+        "description": "This module implements a data path control for sending 8 parallel data streams. It is synchronized with a clock and can be reset. The module receives 8 input data streams and outputs a single data stream. It is controlled by a start signal and an enable output signal, which determines when the output data is valid. The module likely uses internal logic to multiplex or process the 8 input data streams and present them as a single output stream, possibly in a serialized or combined form."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "DCT_1D_Data_Path::Data_2_Add_5_A",
+        "description": "Acts as a data register to hold intermediate results in a data processing block. It is part of a larger system that performs multiple addition and subtraction operations. The data register stores the output from an adder, which processes various input data signals. These stored results are then used in subsequent stages, such as being fed into D flip-flops for further processing or storage. This setup ensures that the computed values are available for the next stage of the data flow, maintaining the integrity and synchronization of the arithmetic operations."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_2_to_Send_8_Pixel_4",
+        "description": "Acts as a data register to store and synchronize input data from an adder. On the rising edge of the clock, it captures the input values and holds them until the next clock cycle. The data register also includes a reset functionality to initialize the stored data to a known state. This ensures that the data is stable and aligned with the system's timing requirements before being passed to the next module for further processing."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_1_Seler_4_to_1_7",
+        "description": "Acts as a data register to store and synchronize multiple input data streams. It captures and holds data on the rising edge of the clock signal, and it can be reset by an active-low reset signal. The register receives several data inputs, and a multiplexer selects which input to store based on control signals. The stored data is then output to different destinations, providing a way to manage and route data in a digital system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_1_Add_6_C",
+        "description": "Acts as a data register to store intermediate results from arithmetic operations. It holds the output of an adder module, which processes multiple addition and subtraction operations. The data register captures these results and provides them for further processing or storage in subsequent clock cycles. This functionality is essential in arithmetic logic units (ALUs) or similar data processing blocks where maintaining and propagating intermediate values is crucial for correct computation."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_2_Add_5_F",
+        "description": "Acts as a data register to store the result of an addition operation. It holds one of the outputs from an adder module, which processes multiple input data signals for both addition and subtraction. The data register is part of a larger system that manages parallel arithmetic operations, and it ensures that the computed results are available for further processing or storage in subsequent clock cycles."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_2_Sub_5_D",
+        "description": "Serves as a data register in a multiplexer and adder module. It holds intermediate results from arithmetic operations, specifically from a subtraction operation. The value is one of several inputs to the multiplexer, which selects between different data paths based on a control signal. This data register is part of a larger system that manages multiple operational modes, where it helps in routing and storing specific data for further processing."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_3_Sub_4_D",
+        "description": "Serves as a data register in a multiplexer and adder module. It holds intermediate results from arithmetic operations, such as addition and subtraction, and is part of a larger data path that processes multiple inputs. The value stored in this register is one of the inputs to the adder, which performs the necessary computations and routes the output to D flip-flops for storage. This setup ensures that the processed data is available for further processing or output in the next clock cycle."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Adder_2_to_D_Flip_Flop_2_4",
+        "description": "Serves as a data register to store and synchronize the results of arithmetic operations. It captures the output from an adder module, which performs multiple addition and subtraction operations in parallel. The data is then held and synchronized with the system clock, ensuring that the processed data is stable and ready for further processing or output. This synchronization is crucial for maintaining the correct timing and data integrity in the overall data processing pipeline."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Mult_to_Selector_1_to_4_Add_C",
+        "description": "Acts as a data register to store the result of an arithmetic operation. This data is then used as one of the inputs to a multiplexer, which selects from multiple data paths based on a control signal. The register holds intermediate results that are essential for further processing or distribution in the system, ensuring that the correct data is available for subsequent operations."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Mult_to_Selector_1_to_4_Sub_D",
+        "description": "Acts as a data register to store the result of a subtraction operation. This data register holds one of the multiple outputs generated by a multiplier, which processes input data from a 4-to-1 selector. The stored value is then passed to a 1-to-4 selector, where it can be routed to different parts of the system based on a control signal. This ensures that the processed data is correctly distributed for further operations or storage, maintaining the flow and integrity of the arithmetic computations."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Receive_8_Pixel_to_Adder_1_In_Pixel_4",
+        "description": "Acts as a data register to hold and transfer one of the eight input pixel values to the adder module. It is part of a larger data path that captures and distributes multiple parallel data streams. When the enable signal is asserted, it passes the captured pixel value to the corresponding input of the adder, where it is used in arithmetic operations such as addition and subtraction with other pixel values. The results of these operations are then stored or further processed."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_2_to_Send_8_Pixel_7",
+        "description": "Acts as a data register to store and synchronize 8-bit wide input data. This register captures the input data on the rising edge of the clock signal and holds it until the next clock cycle. It also includes a reset functionality to initialize the stored data to a known state. The synchronized data is then passed to another module for further processing, ensuring that the data is stable and aligned with the system's timing requirements."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Receive_8_Pixel_to_Adder_1_In_Pixel_6",
+        "description": "Acts as a data register to hold and transfer one of the eight input pixel values to the adder module. It is part of a data path that captures and distributes input data to multiple output channels. When the enable signal is asserted, it allows the data to be passed to the adder, where it is used in arithmetic operations such as addition and subtraction. The results of these operations are then stored or further processed."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_3_Add_4_C",
+        "description": "Acts as a data register to store the result of an addition operation. It holds one of the intermediate results from a set of parallel arithmetic operations, which are then passed to D flip-flops for storage. This register is part of a larger data processing block that handles multiple additions and subtractions, ensuring that the computed values are available for subsequent processing stages."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Adder_2_to_D_Flip_Flop_2_7",
+        "description": "Serves as a data register to store and synchronize the results of arithmetic operations. It receives processed data from an adder, which performs multiple addition and subtraction tasks. The data is then latched on the rising edge of the clock signal, ensuring that it is stable and aligned with the system's timing requirements. This synchronization is crucial for maintaining the integrity of the data as it is passed to subsequent processing stages."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_0_Sub_7_D",
+        "description": "Serves as a data register in a multiplexer and adder module. It holds intermediate results from arithmetic operations, specifically subtraction, and is one of the inputs to the multiplexer. The multiplexer uses a control signal to select between different data paths, including this register, to route the appropriate data for further processing. This setup ensures that the correct data is passed through the system based on the current operational mode, facilitating efficient data flow and processing in a multi-operation environment."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_1_Sub_6_B",
+        "description": "Serves as a data register in a multiplexer and adder module. In the multiplexer, it is one of the input data signals that can be selected based on a control signal to route specific data for further processing. In the adder, it participates in arithmetic operations, where it is combined with other data inputs to produce results. These results are then stored in D flip-flops, enabling the system to handle multiple parallel operations efficiently."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::End_Calc",
+        "description": "Acts as a control signal to initiate the processing and transmission of 8 parallel data streams. When asserted, it triggers the module to begin handling the incoming data, ultimately producing a single output data stream. This control signal synchronizes the start of the data processing with other system operations, ensuring that the output data is valid and ready for further use."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Mult_to_Selector_1_to_4_Add_F",
+        "description": "Acts as a data path to transfer the results of arithmetic operations from a multiplier to a selector. The data register holds one of the multiple output streams generated by the multiplier, which processes input data for addition and subtraction. This data is then directed to a 1-to-4 selector, where it can be chosen for further processing or distribution in the system based on control signals. The data register ensures that the processed information is available for the next stage in the data flow."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Mult_to_Selector_1_to_4_Add_A",
+        "description": "Acts as a data register to store the result of an arithmetic operation. This signal holds the processed data from a multiplier, which is then passed to a multiplexer for further routing. The data register ensures that the computed values are available and correctly directed to the next stage in the data processing pipeline, facilitating efficient data flow and handling."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Adder_2_to_D_Flip_Flop_2_3",
+        "description": "Serves as a data path to transfer the results of arithmetic operations from an adder to a D flip-flop. The signal carries processed data, which is then stored in the flip-flop on the next clock edge. This ensures that the computed values are synchronized with the system clock and ready for further processing or output."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_0_Sub_7_G",
+        "description": "Acts as a data register to store the result of a subtraction operation. It holds the output from an adder module, which processes multiple addition and subtraction operations. The data is then stored in a D flip-flop, which captures the value on the next clock edge. This setup is commonly used in arithmetic logic units (ALUs) or similar data processing blocks where intermediate results need to be temporarily stored for further processing."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Mult_to_Selector_1_to_4_Sub_G",
+        "description": "Acts as a data path in the system, carrying the results of arithmetic operations from a multiplier to a multiplexer. This data path is one of several outputs generated by the multiplier, which processes input data for both addition and subtraction. The multiplexer then selects this data path, along with others, based on a control signal, directing the data to the appropriate destination for further processing or distribution. This ensures that the correct data is used in subsequent operations, depending on the system's current operational mode."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_2_Sub_5_B",
+        "description": "Acts as a data register to store intermediate results from arithmetic operations. It holds the output of an adder module, which processes multiple addition and subtraction operations. The data is then passed to D flip-flops, which capture and store the results on the next clock edge. This mechanism ensures that the computed values are retained and can be used in subsequent processing stages, facilitating efficient data flow and state management in the system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Clock",
+        "description": "Acts as a clock signal to synchronize the operations of multiple modules in the data path. It ensures that data is captured, processed, and transferred in a coordinated manner. The clock signal triggers the flip-flops to store incoming data on its rising edge, and it aligns the timing of data flow between different stages, such as data reception, processing, and output. This synchronization is crucial for maintaining the integrity and stability of the data as it moves through the system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_1_Seler_4_to_1_5",
+        "description": "Acts as a data register to store and synchronize input data. It captures and holds data on the rising edge of the clock signal, and it can be reset by an active-low reset signal. The data register receives multiple data inputs, and a multiplexer selects which input to store based on control signals. The stored data is then output to different destinations, providing a way to synchronize and select data in a digital system. This functionality ensures that the data is properly aligned and available for further processing."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Adder_2_to_D_Flip_Flop_2_0",
+        "description": "Serves as a data register to store and synchronize the results of arithmetic operations. The register captures the output from an adder module, which performs multiple addition and subtraction operations, and holds this data until the next clock edge. This ensures that the processed data is stable and properly aligned with the system's timing requirements before being passed to subsequent processing stages."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_3_Add_4_to_D_Flip_Flop_1_6",
+        "description": "Acts as a data register to store the result of an addition operation. This signal holds the computed value from the adder and is used to synchronize and store the data in a D flip-flop. The stored value can then be selected and output for further processing, ensuring that the data is stable and available at the correct time in the system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Adder_2_to_D_Flip_Flop_2_5",
+        "description": "Acts as a data register to store and synchronize the results of arithmetic operations. The register captures the output from an adder module on the rising edge of the clock signal, ensuring that the data is stable and aligned with the system's timing requirements. This setup is crucial for maintaining data integrity and proper sequencing in data processing blocks, such as arithmetic logic units (ALUs), where multiple operations are performed in parallel."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_2_Sub_5_E",
+        "description": "Acts as a data register in a multiplexer and adder system. It holds intermediate results from subtraction operations, which are then used as inputs to the multiplexer for selection based on a control signal. The selected data is further processed by the adder, and the final results are stored in D flip-flops. This register plays a crucial role in managing and routing data through different arithmetic operations, ensuring that the correct data is available for subsequent processing steps."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Adder_2_to_D_Flip_Flop_2_6",
+        "description": "Serves as a data register to store and synchronize the results of arithmetic operations. The signal captures the output from an adder module, which performs multiple addition and subtraction operations in parallel. This data is then held and synchronized with the system clock, ensuring that the processed values are stable and ready for further processing or transmission. The synchronization helps in maintaining the correct timing and alignment of data across different stages of the processing pipeline."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_0_Add_7_F",
+        "description": "Acts as a data register to store intermediate results from arithmetic operations. It holds the output of an adder module, which processes multiple addition and subtraction operations. The data is then passed to D flip-flops for storage, enabling the system to manage and propagate the results in subsequent clock cycles. This setup is crucial for maintaining the flow of data in a system that performs parallel arithmetic operations, ensuring that the results are available for further processing or output."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Start_Calc",
+        "description": "Acts as a control signal to indicate when the data is ready for further processing. Asserted after the module captures and distributes input data to 8 output channels, enabling the next stage to begin its operations."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_0_Sub_7_E",
+        "description": "Serves as a data register in a multiplexer and adder module. It holds intermediate results from specific arithmetic operations, such as addition and subtraction, and is part of a larger set of data signals that are processed and routed based on control signals. The value stored in this register is used to manage data flow and ensure that the correct results are passed to subsequent stages, like D flip-flops, for further processing or storage."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_1_Add_6_to_D_Flip_Flop_1_2",
+        "description": "Acts as a data register to store the result of an addition operation. The signal captures and holds the computed value from the adder module, which processes multiple input data streams. This stored value is then available for further processing or output, ensuring that the data is synchronized and ready for use in subsequent stages of the system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_2_to_Send_8_Pixel_3",
+        "description": "Acts as a data register to store and synchronize input data from an adder. The register captures the input data on the rising edge of the clock and holds it until the next clock cycle. It also includes a reset functionality to initialize the stored data to a known state. The synchronized data is then passed to another module for further processing, ensuring that the data is stable and aligned with the system's timing requirements. This mechanism is crucial for maintaining data integrity and proper timing in the data path."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Receive_8_Pixel_to_Adder_1_In_Pixel_1",
+        "description": "Acts as a data register to hold and forward one of the eight input data streams to the adder module. This data register is part of a larger data reception and distribution unit that captures and distributes input data to multiple output channels. When the enable input is asserted, it transfers the captured data to the corresponding output, which is then used in subsequent arithmetic operations, such as addition and subtraction, within the adder module."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_2_to_Send_8_Pixel_2",
+        "description": "Acts as a data register to store and synchronize multiple input data streams. It captures the input values on the rising edge of the clock signal and holds them until the next clock cycle. This ensures that the data is stable and aligned with the system's timing requirements before being passed to the next processing stage. The register also includes a reset functionality to initialize the stored data to a known state, which is useful for system initialization or error recovery."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_0_Add_7_A",
+        "description": "Acts as a data register to store the result of an addition operation. This data is part of a larger set of inputs that are processed by an adder, which performs multiple addition and subtraction operations. The results from these operations are then stored in D flip-flops, which hold the values for further processing or output. This setup is common in arithmetic logic units (ALUs) where parallel data processing is required."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_1_Seler_4_to_1_6",
+        "description": "Acts as a data register to store and synchronize input data. It captures and holds the selected data on the rising edge of the clock signal, and it can be reset by an active-low reset signal. The register receives multiple data inputs, and a multiplexer selects which input to store based on control signals. The stored data is then output to different destinations, providing a way to synchronize and select data in a digital system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::D_Flip_Flop_2_to_Send_8_Pixel_1",
+        "description": "Acts as a data register to store and synchronize input data from an adder. It captures the input values on the rising edge of the clock signal and holds them until the next clock cycle. This ensures that the data is stable and aligned with the system's timing requirements before being passed to the next module. The data register also includes a reset functionality, which sets all stored data to a known initial state when activated."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Mult_to_Selector_1_to_4_Sub_E",
+        "description": "Acts as a data path to transfer the result of a subtraction operation from a multiplier to a selector. This data path is part of a larger system where the multiplier processes input data and generates multiple output streams. The specific data path carries one of the subtraction results, which is then directed to a 1-to-4 selector. The selector uses a control signal to choose one of the four possible data paths, including this subtraction result, for further processing or distribution in the system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_1_Sub_6_E",
+        "description": "Acts as a data register to store the result of an arithmetic operation. It holds the output from an adder module, which processes multiple addition and subtraction operations. The data is then passed to D flip-flops, where it is stored on the next clock edge. This setup is commonly used in arithmetic logic units (ALUs) or similar data processing blocks to manage and store intermediate results during complex computations."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_1_Sub_6_G",
+        "description": "Serves as a data register in a multiplexer and adder module. In the multiplexer, it is one of the input data signals that can be selected based on a control signal to manage data flow. In the adder, it is part of the input data set used for performing arithmetic operations, with the results being stored in D flip-flops. This data register facilitates the handling and processing of multiple data paths in a system that supports various operational modes and parallel arithmetic operations."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_1_Sub_6_to_D_Flip_Flop_1_3",
+        "description": "Acts as a data register to store the result of a subtraction operation. It holds the output from an adder module, which processes multiple input data streams and performs specific arithmetic operations. The data is then directed to a D flip-flop for storage, where it can be synchronized with the clock signal and selected for further processing. This ensures that the computed values are correctly captured and managed in the system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Adder_2_to_D_Flip_Flop_2_2",
+        "description": "Serves as a data register to store the results of arithmetic operations. It captures and holds the processed data from an adder on the rising edge of the clock signal, ensuring that the data is stable and synchronized with the system's timing. The register also includes a reset functionality to initialize the stored data to a known state. This setup is commonly used in arithmetic logic units (ALUs) or similar data processing blocks where multiple operations are performed in parallel and need to be synchronized with the clock for further processing."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Sele",
+        "description": "Acts as a control signal to manage data routing in a multiplexer. It selects between multiple input data sources and directs the chosen data to the appropriate output paths. The control signal determines which of the available data paths is active, enabling flexible data flow within the system. This allows for dynamic selection and routing of data based on the current operational needs, supporting various processing modes."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_2_Sub_5_G",
+        "description": "Acts as a data register to store the result of a subtraction operation. It is part of a larger data processing block that handles multiple arithmetic operations, including both addition and subtraction. The value stored in this register is one of several outputs from an adder module, which processes various input data signals. These results are then passed to D flip-flops, where they are held until the next clock cycle, ensuring synchronized and controlled data flow through the system."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::Data_1_Add_6_A",
+        "description": "Acts as a data register to store intermediate results in a data processing block. It holds the output from an adder module, which performs multiple addition and subtraction operations. The data is then passed to D flip-flops for storage, enabling the system to manage and propagate the results of these arithmetic operations efficiently. This setup is commonly used in arithmetic logic units (ALUs) or similar blocks where parallel processing of multiple operations is required."
+      },
+      {
+        "signal": "DCT_1D_Data_Path::En_In",
+        "description": "Acts as a control signal to initiate the data reception and distribution process. When asserted, it allows the module to capture input data and distribute it to multiple output channels. This control signal is essential for synchronizing the data flow and ensuring that the subsequent processing stages receive valid data."
+      }
+    ],
+    "module_description": "This module serves as a data path controller for managing 8 parallel data streams. It synchronizes the data flow with a clock signal and can be reset to an initial state. When activated by a start signal, it processes the 8 input data streams and outputs a single, consolidated data stream. The enable output signal indicates when the processed data is ready for further use. This functionality is useful in systems requiring the aggregation or serialization of multiple data inputs into a single, manageable output, ensuring that the data is valid and synchronized with the system's timing."
+  },
+  {
+    "module_id": "Dispose",
+    "block_descriptions": [
+      {
+        "code": "RGB_to_Y RGB_to_Y( \n.Clock( Clock ),\n.Reset_n( Reset_n ),\n.In_Data( Data_In ),\n.En_In( En_In ),\n.En_Out( En_Y_to_Image ),\n.Out_Y( Data_Y_to_Image )\n);\n\n//U1    Instantiate Image module\n",
+        "description": "This code instantiates a module named `RGB_to_Y` that converts input data from one format to another. It operates synchronously, driven by a clock signal. The module has an active-low reset signal to initialize the system and control flags to enable input and output operations. When the input enable flag is active, it processes the incoming data. Once the conversion is complete, it outputs the transformed data when the output enable flag is active. The primary function is to perform a specific data transformation and synchronize the processed data with the rest of the system."
+      },
+      {
+        "code": "Image Image(\n.Clock( Clock ),\n.Reset_n( Reset_n ),\n.En_In( En_Y_to_Image ),\n.In_Data(Data_Y_to_Image),\n.En_Out( En_Out ),\n.Out_Data(Data_Out)\n);\n\nendmodule",
+        "description": "This code defines a synchronous module that processes input data and generates output data. It is controlled by a clock signal, a reset signal, and enable signals for both input and output. When the input enable is active, the module captures the input data. The output data is generated and made available when the output enable is active. The reset signal, when inactive, initializes or resets the internal state of the module."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "Dispose::Clock",
+        "description": "Acts as a control signal to synchronize the operations of the `RGB_to_Y` and `Image` modules. This signal ensures that data processing and transfer occur in a coordinated manner, aligning the activities of both modules to the same timing reference. It is essential for maintaining the correct sequence of operations and ensuring that data is processed and propagated reliably between the modules."
+      },
+      {
+        "signal": "Dispose::Data_In",
+        "description": "Acts as a data register to hold the input information for processing. It stores the incoming data that needs to be transformed. When the input enable control signal is active, this data is processed by the module. After the transformation, the output data is synchronized and ready for further use when the output enable control signal is asserted."
+      },
+      {
+        "signal": "Dispose::Data_Y_to_Image",
+        "description": "Acts as a data register to hold the transformed data after processing. This register is used to transfer the processed information from one module to another, ensuring that the data is synchronized and ready for further operations. It plays a crucial role in the data flow by storing the intermediate results and making them available for the next stage of processing."
+      },
+      {
+        "signal": "Dispose::En_Y_to_Image",
+        "description": "Acts as a control signal to manage the data flow between two processing stages. It is asserted when the first stage has completed its data transformation and is ready to pass the processed data to the next stage. This synchronization ensures that the second stage only processes valid and fully transformed data, maintaining the integrity of the data pipeline."
+      },
+      {
+        "signal": "Dispose::En_In",
+        "description": "Acts as a control signal to initiate the processing of incoming data. When active, it allows the module to accept and process new input data, ensuring that the data transformation only occurs during valid input conditions. This synchronization mechanism helps in managing the flow of data through the system, coordinating with other operations to maintain proper timing and data integrity."
+      },
+      {
+        "signal": "Dispose::En_Out",
+        "description": "Acts as a control signal to manage the output data generation and availability. It is activated to indicate that the processed data is ready to be sent out, allowing the downstream components to capture the valid output. This signal ensures that data is only propagated when the processing is complete and the output is stable."
+      },
+      {
+        "signal": "Dispose::Data_Out",
+        "description": "Serves as a data register to store and output the processed information. It holds the result after the module processes the input data, which is then made available for external use when the output control signal is active. This register plays a crucial role in synchronizing the data flow, ensuring that the output is valid and stable for downstream components."
+      },
+      {
+        "signal": "Dispose::Reset_n",
+        "description": "Acts as a control signal to initialize or reset the internal state of the modules. This signal, when inactive, ensures that the system starts in a known state or is reset to this state during operation. It plays a crucial role in synchronizing the initialization process and maintaining the integrity of the data transformation and processing within the modules."
+      }
+    ],
+    "module_description": "This module serves as a data converter, transforming input data into a different format. It operates in a synchronous manner, controlled by a clock signal, and can be reset with an active-low reset signal. The conversion process is initiated when the input enable signal is active, allowing the module to capture and process the incoming data. Once the transformation is complete, the output data is released when the output enable signal is active, ensuring that the processed data is synchronized with the system's timing requirements."
+  },
+  {
+    "module_id": "Image",
+    "block_descriptions": [
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n        Row_Counter <= 3'b0;\n    else if( (R_Address[2:0] == 3'b111) && R_En ) // The lower 3 bits of the address from 0 to 7 represent reading one line\n        begin\n            if(Row_Counter == 3'b111)           // Count from scratch every 8 lines read\n                Row_Counter <= 3'b0;\n            else\n                Row_Counter <= Row_Counter + 1'b1;\n        end\n    else\n        Row_Counter <= Row_Counter;\nend\n\n//RAM read control\n",
+        "description": "Implements a synchronous counter with reset and enable control. The counter increments on clock edges when a specific condition is met, which involves checking if the lower 3 bits of an input address match a certain value and an enable signal is active. If the counter reaches its maximum value, it resets to zero. The counter holds its current value if the condition is not met. This logic is used to control the reading of lines from a memory, ensuring that it cycles through a set of 8 lines before resetting."
+      },
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n        R_Address <= 12'd2559;\n    else if(R_Address == 12'd2559) //If the last bit is read\n        begin\n            if( (W_Address == 12'd2559) && W_En )//At the same time, there is already RAM written. The read address can be reset to 0\n                R_Address <= 12'd0;\n            else\n                R_Address <= R_Address;\n        end\n    else if( (R_Address[2:0] == 3'b111 ) && R_En ) //If the read enable is valid and one line has been read, proceed to the next step for judgment. R_Address[2:0]From 0 to 7 represents reading 8\n        begin\n            if(Row_Counter == 3'b111) // Determine if you have read enough 8 lines\n                R_Address <= R_Address - 12'd2239 ; // Switch to the next group after reading 8 lines\n            else\n                R_Address <= R_Address + 12'd313 ;  // Switch to the next column if you haven't read enough rows\n        end\n    else if(R_En)\n        R_Address <= R_Address + 12'd1;\n    else if(R_Address > 12'd2559)\n        R_Address <= 12'd0;\n    else\n        R_Address <= R_Address;\nend    \n\n//Ping_pang Control\n",
+        "description": "This code implements a synchronous read address generator with reset and enable control. It increments the read address on each clock edge when the read enable is active. The address wraps around to zero when it reaches the maximum value. If the read address reaches the maximum and the write address is also at the maximum with a write enable, the read address resets to zero. The address also adjusts based on a row counter, either moving to the next column or switching to the next group after reading a specific number of lines. This logic ensures proper synchronization and control of read operations in a memory system."
+      },
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n        Chip_Sele <= 1'b0;\n    else if( (W_Address == 12'd2559) && W_En )//If the write enable is valid (continue writing) and the last bit is written, switch RAM\n        Chip_Sele <= ~Chip_Sele;//Switching RAM-chips\n    else\n        Chip_Sele <= Chip_Sele;\nend\n\n//Wait for the data to be processed before outputting the enable signal\n",
+        "description": "This code implements a synchronous control logic with reset and conditional toggling. On the rising edge of the clock or the falling edge of the reset signal, it resets a control flag to a low state. If the reset is not active, it checks if a specific address condition and a control flag are met. If both conditions are true, it toggles the control flag. Otherwise, the control flag retains its previous value. This logic ensures that the control flag switches only when a particular address is reached and a write operation is in progress, effectively managing the selection between two components."
+      },
+      {
+        "code": "always@( posedge Clock or negedge Reset_n )\nbegin\n    if(!Reset_n)\n        En_Out <= 1'b0;\n    else if(R_En)\n        En_Out <= 1'b1;\n    else\n        En_Out <= 1'b0;\nend\n\n//Combinatorial logic\n//Ping_pang Control\n",
+        "description": "This code implements a synchronous enable signal generator with reset functionality. It synchronizes the output enable signal with the clock. When the reset is active, the enable signal is set to a low state. If a control flag is asserted, the enable signal is set to a high state. Otherwise, the enable signal remains in a low state. The combinatorial logic section is intended for additional control, such as ping-pong switching, but the details are not provided."
+      },
+      {
+        "code": "always@( * )\nbegin\n    if(Chip_Sele)\n        begin\n            W_En_0 = 1'b0;\n            W_En_1 = W_En;\n            R_En_0 = R_En;\n            R_En_1 = 1'b0;\n            Address_0 = R_Address;\n            Address_1 = W_Address;\n        end\n    else\n        begin\n            W_En_0 = W_En;\n            W_En_1 = 1'b0;\n            R_En_0 = 1'b0;\n            R_En_1 = R_En;\n            Address_0 = W_Address;\n            Address_1 = R_Address;\n        end\nend\n\n",
+        "description": "This code implements a combinational logic block that controls the routing of enable and address signals based on a control flag. When the control flag is active, it sets one write enable signal to a constant low, routes the other write enable and read enable signals accordingly, and assigns addresses to specific outputs. When the control flag is inactive, it swaps the routing of the enable and address signals, ensuring that the appropriate signals are connected to their respective outputs."
+      },
+      {
+        "code": "always@( posedge Clock or negedge Reset_n )\nbegin\n    if(!Reset_n)\n        Chip_Sele_DFF <= 1'b0;\n    else\n        Chip_Sele_DFF <= Chip_Sele;\nend\n\n//Combinatorial logic\n// Output the data read from RAM\n",
+        "description": "This code implements a synchronous reset and data capture logic. It captures an input signal (\"input A\") on the rising edge of the clock and stores it in a register (\"register B\"). If the reset signal (\"control flag\") is active low, the register is reset to a default value. The combinatorial logic section is intended to output data, likely from a memory or storage element, based on the captured input."
+      },
+      {
+        "code": "always @( * )\nbegin\n    if(Chip_Sele_DFF)\n        Out_Data = RAM_0_Out;\n    else\n        Out_Data = RAM_1_Out;\nend\n\nendmodule ",
+        "description": "This code implements a simple multiplexer. It selects between two data inputs based on the value of a control flag. If the control flag is active, the output is set to the first input; otherwise, it is set to the second input. This logic is purely combinational, meaning the output changes immediately in response to changes in the control flag or the input data."
+      },
+      {
+        "code": "always @( posedge Clock or negedge Reset_n )\nbegin\n    if( !Reset_n )\n        Cache_8_Pixel <= 8'b0;\n    else \n        Cache_8_Pixel <= In_Data;\nend\n\n//RAM Write enable control\n",
+        "description": "This code implements a synchronous reset and data update mechanism. It resets a register to zero when the reset signal is active (low). When the reset is inactive, the register updates its value with the incoming data on each rising edge of the clock. This functionality is typically used for initializing or clearing a data storage element and then updating it with new data as needed."
+      },
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n        W_En <= 1'b0;\n    else if(En_In)  //  Input enables effective execution of write operations\n        W_En <= 1'b1;\n    else\n        W_En <= 1'b0;\nend\n\n//RAM Write control\n",
+        "description": "This code implements a synchronous write enable control for a RAM. It uses a clock and a reset signal to manage the write enable flag. When the reset is active (low), the write enable is set to inactive (low). If the reset is not active, the write enable follows the state of an input enable signal: it becomes active (high) when the input enable is high, allowing write operations, and inactive (low) otherwise, preventing write operations."
+      },
+      {
+        "code": "always @( posedge Clock or negedge Reset_n )\nbegin\n    if(!Reset_n)\n        W_Address <= 12'd2559;\n    else if(En_In)\n        begin\n            if(W_Address == 12'd2559) //If the last data is written, start writing from scratch\n                W_Address <= 12'd0;\n            else\n                W_Address <= W_Address + 12'b1; // Write in sequence 0~2559\n        end\n    else if(W_Address > 12'd2559)\n        W_Address <= 12'd0;\n    else\n        W_Address <= W_Address;\nend\n\n//RAM read enable control\n",
+        "description": "This code implements a synchronous address counter with reset and enable control. The counter increments on each clock edge when the enable signal is active. If the counter reaches its maximum value, it resets to zero and starts over. The counter is reset to a specific initial value when the reset signal is active. The counter holds its current value if the enable signal is not active and the counter value is within the specified range. This functionality is typically used for addressing memory or controlling data flow in a sequential manner."
+      },
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n\t    R_En <= 1'b0;\n    else if( R_Address == 12'd2559 ) //If the last bit is read\n        begin\n\t        if( (W_Address == 12'd2559) && W_En) // The operation can be read when one of the ROMs is finished\n                R_En <= 1'b1;\n\t        else \n\t\t        R_En <= 1'b0;\n        end\n    else \n\t    R_En <= R_En ;\nend\n\n//Row Count\n",
+        "description": "This code implements a synchronous enable control for a read operation. The enable signal, \"R_En,\" is managed based on the clock and reset conditions. When the reset is active, the enable signal is set to 0. If the read address reaches a specific value (indicating the end of the data), the enable signal is set to 1 if the write address is at the same value and the write enable is active, otherwise, it is set to 0. If the read address is not at the end, the enable signal retains its previous value. This logic ensures that the read operation is only enabled under specific conditions, coordinating with the write operation."
+      },
+      {
+        "code": "RAM RAM_0(\n.address ( Address_0 ),\n.clock ( Clock ),\n.data ( Cache_8_Pixel ),\n.rden ( R_En_0 ),\n.wren ( W_En_0 ),\n.q ( RAM_0_Out )\n);\n//Instantiating RAM_1 modules\n",
+        "description": "This code instantiates a RAM module, which is used for storing and retrieving data. The RAM has an address input to select the memory location, a clock signal to synchronize read and write operations, and separate data inputs and outputs. It also includes control signals for read and write enable, allowing data to be written into the RAM when the write enable is active and read from the RAM when the read enable is active. The output of the RAM is provided on the data output port."
+      },
+      {
+        "code": "RAM RAM_1(\n.address ( Address_1 ),\n.clock ( Clock ),\n.data ( Cache_8_Pixel ),\n.rden ( R_En_1 ),\n.wren ( W_En_1 ),\n.q ( RAM_1_Out )\n);\n\n//Input Data Cache\n",
+        "description": "This code block describes a synchronous RAM (Random Access Memory) module. It has an address input, a clock signal for synchronization, and data input for writing. The module also includes read and write enable control flags to manage read and write operations. When the write enable flag is active, data is written to the memory location specified by the address on the clock edge. Conversely, when the read enable flag is active, data is read from the memory location and output. This setup is typically used for temporary storage and buffering of data in digital systems."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "Image::W_En_1",
+        "description": "Acts as a control signal to manage write operations in a RAM module. When the control flag is active, it enables the writing of data to the memory location specified by the address. This signal ensures that data is only written when the appropriate conditions are met, preventing unintended data modifications and maintaining the integrity of the stored information."
+      },
+      {
+        "signal": "Image::Address_1",
+        "description": "Acts as a data register to store memory addresses for read and write operations. It is used in a synchronous RAM module where it specifies the location in memory to be accessed. When the control signal is active, it routes the write address to this register, enabling data to be written to the specified location. When the control signal is inactive, it routes the read address, allowing data to be read from the specified location. This ensures that the correct memory operations are performed based on the state of the control signal."
+      },
+      {
+        "signal": "Image::W_En_0",
+        "description": "Acts as a control signal to manage the write enable functionality for a RAM module. When the control flag is active, it disables the write operation by setting the control signal to a constant low, ensuring no data is written to the memory. When the control flag is inactive, it allows the write operation by passing the write enable signal to the RAM, enabling data to be stored in the specified memory location. This control mechanism ensures that data is only written to the RAM under the correct conditions."
+      },
+      {
+        "signal": "Image::Address_0",
+        "description": "Serves as a data register to store memory addresses. It is used to select the specific location in the RAM for read or write operations. The address is determined based on the state of a control flag, which routes either the read or write address to this register. This ensures that the correct memory location is accessed during read and write operations, facilitating proper data storage and retrieval."
+      },
+      {
+        "signal": "Image::R_En_0",
+        "description": "Acts as a control signal to manage the read operation of a RAM module. When the control flag is active, it routes the read enable signal to the RAM, allowing data to be read from the specified memory address. When the control flag is inactive, it disables the read operation by setting the read enable signal to a constant low, preventing any data from being read from the RAM. This control mechanism ensures that the read operation is synchronized and only occurs under the correct conditions."
+      },
+      {
+        "signal": "Image::Chip_Sele",
+        "description": "Acts as a control signal to manage the selection between two components. It is reset to a low state during system initialization and toggles when a specific address condition and a write operation are met, ensuring that the control signal switches only at the appropriate times. This control signal then routes enable and address signals to different outputs based on its state, effectively managing which component is active. The signal is also captured in a register for synchronization with the clock, ensuring stable and reliable switching behavior."
+      },
+      {
+        "signal": "Image::Row_Counter",
+        "description": "Serves as a state flag to track the progress of reading lines from a memory. It increments synchronously with the clock when specific conditions are met, such as the read enable being active and the lower bits of the read address matching a certain value. When the flag reaches its maximum value, it resets to zero, indicating that a complete set of 8 lines has been read. This flag ensures that the system cycles through a fixed number of lines before resetting, facilitating organized and controlled data access."
+      },
+      {
+        "signal": "Image::R_En",
+        "description": "Acts as a control signal to manage the read operation in a memory system. This signal is asserted when specific conditions are met, such as the read address reaching a certain value and the write address being at the same value with the write enable active. It ensures that the read operation is synchronized with the write operation, enabling data reading only when it is safe and appropriate. The control signal is reset to a low state during a system reset and retains its previous state if the read address is not at the end. This logic helps in coordinating the read and write operations, ensuring proper data flow and synchronization."
+      },
+      {
+        "signal": "Image::Chip_Sele_DFF",
+        "description": "Acts as a control signal to select between two data sources. During the rising edge of the clock, it captures an input and stores it in a register. If a reset condition is detected, the register is set to a default value. In the combinatorial logic, this control signal determines which of the two data inputs is passed to the output. When the control signal is active, the first data source is selected; otherwise, the second data source is chosen. This selection process is immediate and based on the current state of the control signal."
+      },
+      {
+        "signal": "Image::R_En_1",
+        "description": "Acts as a control signal to manage read operations in a RAM module. When the control flag is active, it disables read operations by setting the read enable signal to a constant low, ensuring no data is read from the memory. When the control flag is inactive, it enables read operations by setting the read enable signal, allowing data to be read from the specified memory address. This control mechanism helps in coordinating the timing and conditions under which data can be accessed from the RAM."
+      },
+      {
+        "signal": "Image::RAM_1_Out",
+        "description": "Acts as a data register to store and output values from a memory location. The value is read from the memory based on the address and control signals. When the read enable flag is active, the data stored in the specified memory location is retrieved and provided as the output. This functionality supports temporary storage and buffering of data, allowing it to be used in subsequent operations or transferred to other parts of the system."
+      },
+      {
+        "signal": "Image::In_Data",
+        "description": "Serves as a data register to store incoming information. During the system's operation, it captures and holds new data on each clock cycle if not in a reset condition. When the reset is active, it initializes or clears the stored value to zero. This behavior is essential for maintaining and updating the current state of data within the system, ensuring that the latest input is available for further processing or storage."
+      },
+      {
+        "signal": "Image::Clock",
+        "description": "Acts as a clock signal to synchronize various operations within the module. It triggers the execution of multiple processes, including counter increments, address updates, and data transfers. The clock signal ensures that all these operations occur in a coordinated and time-sequenced manner, maintaining the integrity and timing of the system's functionality."
+      },
+      {
+        "signal": "Image::R_Address",
+        "description": "Acts as a data register to store and manage the read address in a memory system. It increments on each clock edge when the read enable is active, wrapping around to zero when it reaches the maximum value. The address also adjusts based on a row counter, either moving to the next column or switching to the next group after reading a specific number of lines. This logic ensures proper synchronization and control of read operations, coordinating with the write address and enabling conditions to maintain data integrity and flow."
+      },
+      {
+        "signal": "Image::Cache_8_Pixel",
+        "description": "Acts as a data register to store and forward incoming data. It is reset to zero during the initialization phase and updates with new input data on each clock cycle when not in reset. This data register feeds into multiple RAM modules, where it serves as the data input for write operations. The data is written to the specified memory location when the write enable control signal is active, and read from the memory when the read enable control signal is active. This mechanism supports the temporary storage and buffering of data, facilitating synchronized data handling in the system."
+      },
+      {
+        "signal": "Image::W_En",
+        "description": "Acts as a control signal to manage write operations in a memory system. It is asserted when the input enable is active, allowing data to be written to the memory. When the reset is active, the control signal is de-asserted, preventing any write operations. This signal ensures that write operations occur only when the input conditions are met, providing controlled and synchronized data storage."
+      },
+      {
+        "signal": "Image::Out_Data",
+        "description": "Acts as a data path to select and route information from two possible sources. The selection is controlled by a control flag, which determines the active input. When the control flag is asserted, the data from the first source is passed to the output; otherwise, the data from the second source is used. This behavior ensures that the output reflects the current state of the selected input, providing a dynamic and responsive data flow."
+      },
+      {
+        "signal": "Image::En_In",
+        "description": "Acts as a control signal to manage the write enable functionality for a RAM. When the reset is active, it deactivates the write operations. During normal operation, it enables write operations by setting the write enable flag high when the control signal is asserted. It also controls a sequential address counter, which increments on each clock cycle while the control signal is active. If the counter reaches its maximum value, it resets and starts over, ensuring that write operations proceed in a controlled, sequential manner."
+      },
+      {
+        "signal": "Image::Reset_n",
+        "description": "Acts as a reset signal to initialize and control the state of various components in the system. When active, it resets counters, addresses, and control flags to their initial values. This ensures that the system starts from a known state and can be reinitialized as needed. The reset signal is used in conjunction with the clock to synchronize the reset operation, ensuring that all components are in a consistent state before any further processing occurs."
+      },
+      {
+        "signal": "Image::En_Out",
+        "description": "Acts as a control signal to manage the activation of an output. It is synchronized with the clock and influenced by a reset condition. When the system is reset, the control signal is deactivated. If a specific control flag is active, the control signal is activated; otherwise, it remains inactive. This signal is part of a broader control mechanism that may include additional logic for more complex operations, such as switching between different states or modes."
+      },
+      {
+        "signal": "Image::RAM_0_Out",
+        "description": "Acts as a data register to store and provide data from a memory location. The value is retrieved from the RAM based on the provided address and control signals. When the read enable signal is active, the data stored at the specified address is output. This data can then be used in further processing or selected by a multiplexer to be part of the final output."
+      },
+      {
+        "signal": "Image::W_Address",
+        "description": "Acts as a data register to store and increment the write address. It is used to control the sequential writing of data into memory. The register increments on each clock edge when the write enable is active, and it wraps around to zero after reaching the maximum value. This ensures that data is written in a continuous and controlled manner. When the write address reaches the maximum value and a write operation is in progress, a control flag is toggled to switch between two memory components, ensuring balanced and efficient data storage."
+      }
+    ],
+    "module_description": "This code implements a synchronous RAM (Random Access Memory) module for temporary data storage and buffering. It synchronizes read and write operations with a clock signal. The module uses address inputs to specify memory locations and control signals to manage read and write enable functions. When the write enable is active, data is written to the specified memory location on the rising edge of the clock. When the read enable is active, data is read from the memory location and provided on the output. This functionality ensures that data can be stored and retrieved efficiently, supporting various digital system requirements."
+  },
+  {
+    "module_id": "JPEG_DCT",
+    "block_descriptions": [
+      {
+        "code": "Dispose Dispose(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.En_In(En_In),\n.Data_In(In_Data),\n.En_Out(En_U0_to_U1),\n.Data_Out(Data_U0_to_U1)\n);\n\n//U1    Instantiate DCT module\n",
+        "description": "This code instantiates a module that handles data transfer and processing. It is controlled by a clock signal and can be reset using an active-low reset signal. The module has an enable input to control when data should be processed. When enabled, it takes input data, processes it, and then outputs the processed data. The output is also controlled by an enable signal, which determines when the processed data is valid and can be used by the next stage in the system."
+      },
+      {
+        "code": "DCT DCT(\n.Clock(Clock),\n.Reset_n(Reset_n),\n.En_In(En_U0_to_U1),\n.In_Data(Data_U0_to_U1),\n.En_Out(En_Out),\n.Out_Data(Out_Data)\n);\n\nendmodule ",
+        "description": "This code instantiates a module named DCT, which appears to be a data processing unit. It includes a clock input for synchronization and a reset signal to initialize the module. The module processes input data when an enable signal is active and outputs the processed data. The output is also controlled by another enable signal, ensuring that the data is only sent out when appropriate. This setup suggests a synchronous data path with control over both input and output operations."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "JPEG_DCT::En_Out",
+        "description": "Acts as a control signal to manage the output of processed data from the DCT module. It ensures that the data is only sent out when the processing is complete and the conditions are valid, thus controlling the timing and synchronization of the data flow. This signal helps in maintaining the integrity and order of data as it moves through the system."
+      },
+      {
+        "signal": "JPEG_DCT::Data_U0_to_U1",
+        "description": "Acts as a data register to transfer processed information between two stages of a data processing pipeline. It holds the output from the first stage and provides it as input to the next stage. The transfer is controlled by enable signals, ensuring that data is only passed when both the input and output stages are ready, thus maintaining synchronization and data integrity in the pipeline."
+      },
+      {
+        "signal": "JPEG_DCT::En_U0_to_U1",
+        "description": "Acts as a control signal to manage the data flow between two processing stages. It is asserted when the input data has been processed and is ready to be transferred to the next stage. This signal ensures that the processed data is only passed on when it is valid, thereby synchronizing the operations of the two stages and maintaining the integrity of the data path."
+      },
+      {
+        "signal": "JPEG_DCT::Reset_n",
+        "description": "Serves as a state flag to initialize and reset the modules. When de-asserted, it brings the modules to a known initial state, ensuring that all internal registers and logic are properly set before starting any data processing. This flag is crucial for maintaining the integrity of the system, especially after power-up or when a reset condition is necessary. It synchronizes with the clock signal to ensure that the reset operation is performed at the correct time, preventing any unintended behavior during the initialization phase."
+      },
+      {
+        "signal": "JPEG_DCT::In_Data",
+        "description": "Serves as a data register for input to the processing module. It holds the raw data that needs to be processed. When the enable input is asserted, this data is passed into the module, where it undergoes processing. After processing, the data is then made available to the next stage, controlled by an output enable signal. This ensures that the data flow is synchronized and only valid, processed data is propagated further in the system."
+      },
+      {
+        "signal": "JPEG_DCT::Out_Data",
+        "description": "Serves as a data register to hold the processed information from the DCT module. This register is updated with new values when the processing is complete and an enable signal is asserted, indicating that the data is ready to be sent out. The data register ensures that the output is synchronized and only transferred when valid, maintaining the integrity of the data flow in the system."
+      },
+      {
+        "signal": "JPEG_DCT::Clock",
+        "description": "Serves as a control signal to synchronize the operations of the data processing modules. It ensures that data transfer and processing steps are coordinated, aligning with the system's timing requirements. The signal is essential for maintaining the correct sequence of operations and enabling the modules to function in a time-ordered manner."
+      },
+      {
+        "signal": "JPEG_DCT::En_In",
+        "description": "Acts as a control signal to manage the processing of input data within a module. It is used to determine when the module should accept and process new data. When this control signal is active, it allows the module to take in new data, perform the necessary operations, and prepare the output for the next stage. This ensures that data processing only occurs during the appropriate conditions, maintaining synchronization and proper data flow in the system."
+      }
+    ],
+    "module_description": "This module serves as a synchronous data processing unit. It processes input data and generates output data, with operations synchronized by a clock signal. The module can be initialized or halted using an active-low reset. Data processing is controlled by an enable signal, which determines when the input data should be processed. Similarly, the output of the processed data is managed by another enable signal, ensuring that the data is only valid and usable by subsequent stages when the conditions are met. This design ensures controlled and reliable data flow within the system."
+  },
+  {
+    "module_id": "Mem",
+    "block_descriptions": [
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n        R_Address <= 6'd63;\n    else if(R_Address == 6'd63) //If the last bit is read\n        begin\n            if( (W_Address == 6'd63) && W_En )//At the same time, there is already RAM written. The read address can be reset to 0\n                R_Address <= 6'd0;\n            else\n                R_Address <= R_Address;\n        end\n    else if(R_En)\n        R_Address <= R_Address + 1'b1;\n    else\n        R_Address <= R_Address;\nend  \n\n//Ping_pang Control\n",
+        "description": "This code implements a synchronous read address counter with reset and enable control. The counter increments on each clock edge when the read enable is active. If the counter reaches its maximum value, it checks if a write operation is also at the maximum address and if a write enable is active. If both conditions are met, the read address resets to zero. Otherwise, the counter holds its current value. The reset signal, when active, sets the read address to its maximum value."
+      },
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n        Chip_Sele <= 1'b0;\n    else if( (W_Address == 6'd63) && W_En)//If the write enable is valid (continue writing) and the last bit is written, switch RAM\n        Chip_Sele <= ~Chip_Sele;//Switching RAM-chips\n    else\n        Chip_Sele <= Chip_Sele;\nend\n\n//Wait for the data to be processed before outputting the enable signal\n",
+        "description": "This code implements a synchronous control logic for switching between two memory chips. It uses a clock and an asynchronous reset. When the reset is active, it sets a control flag to a known state. During normal operation, if a specific address is reached and a write enable signal is active, it toggles the control flag to switch between the memory chips. Otherwise, the control flag retains its current value. This logic ensures that the memory chip selection changes only after the last bit of data is written, providing a mechanism for alternating memory access."
+      },
+      {
+        "code": "always@( posedge Clock or negedge Reset_n )\nbegin\n    if(!Reset_n)\n        En_Out <= 1'b0;\n    else if(R_En)\n        En_Out <= 1'b1;\n    else\n        En_Out <= 1'b0;\nend\n\n//Combinatorial logic\n//Ping_pang Control\n",
+        "description": "This code implements a synchronous enable control signal generator. It resets the enable output to a low state when the reset signal is active. When the reset is inactive, the enable output is set to a high state if a control flag is asserted. Otherwise, the enable output remains in a low state. The logic is designed to synchronize with the clock and reset signals, ensuring that the enable output is updated only on specific clock edges or during a reset condition."
+      },
+      {
+        "code": "always@( * )\nbegin\n    if(Chip_Sele)\n        begin\n            W_En_0 = 1'b0;\n            W_En_1 = W_En;\n            R_En_0 = R_En;\n            R_En_1 = 1'b0;\n            Address_0 = {R_Address[2:0],R_Address[5:3]};\n            Address_1 = W_Address;\n        end\n    else\n        begin\n            W_En_0 = W_En;\n            W_En_1 = 1'b0;\n            R_En_0 = 1'b0;\n            R_En_1 = R_En;\n            Address_0 = W_Address;\n            Address_1 = {R_Address[2:0],R_Address[5:3]};\n        end\nend\n\n",
+        "description": "This code implements a combinational logic block that controls the routing of write and read enable signals, as well as address lines, based on a control flag. When the control flag is active, it sets specific write and read enable signals and reorders the address bits for one of the addresses. When the control flag is inactive, it swaps the assignments, setting different write and read enable signals and reordering the address bits for the other address. This logic is used to manage data flow and address mapping in a memory or I/O interface."
+      },
+      {
+        "code": "always@( posedge Clock or negedge Reset_n )\nbegin\n    if(!Reset_n)\n        Chip_Sele_DFF <= 1'b0;\n    else\n        Chip_Sele_DFF <= Chip_Sele;\nend\n\n//Combinatorial logic\n// Output the data read from RAM\n",
+        "description": "This code implements a synchronous reset and data update mechanism. It contains a register that is updated on the rising edge of the clock or the falling edge of the reset signal. When the reset signal is active (low), the register is set to a default value (0). Otherwise, the register takes the value of an input signal. The combinatorial logic part outputs the data read from a memory element, which is likely used for further processing or output."
+      },
+      {
+        "code": "always @( * )\nbegin\n    if(Chip_Sele_DFF)\n        Out_Data = RAM_Mem_0_Out;\n    else\n        Out_Data = RAM_Mem_1_Out;\nend\n\nendmodule ",
+        "description": "This code implements a multiplexer that selects between two data sources based on a control flag. If the control flag is active, it outputs data from the first source; otherwise, it outputs data from the second source. The selection is purely combinational, meaning the output changes immediately in response to the control flag."
+      },
+      {
+        "code": "always @( posedge Clock or negedge Reset_n )\nbegin\n    if( !Reset_n )\n        Cache <= 10'd0;\n    else \n        Cache <= In_Data;\nend\n\n//Mem Write enable control\n",
+        "description": "This code implements a synchronous reset and data storage functionality. It captures and stores input data on the rising edge of the clock signal. When the reset signal is active (low), it initializes the storage to a zero value. Otherwise, it updates the storage with the new input data. This logic is typically used for synchronizing and storing incoming data in a register, ensuring that the stored value is updated only when the reset is not active."
+      },
+      {
+        "code": "always @( posedge Clock or negedge Reset_n )\nbegin\n    if( !Reset_n )\n        W_En <= 1'b0;\n    else if(En_In)\n        W_En <= 1'b1;\n    else\n        W_En <= 1'b0;\nend\n\n//Mem Write control\n",
+        "description": "This code implements a synchronous enable control for a memory write operation. It monitors the clock and reset signals. When the reset is active, it deactivates the write enable signal. If the reset is not active and an input enable signal is asserted, it activates the write enable signal. Otherwise, it deactivates the write enable signal. This ensures that the write enable signal is only active when the system is not in reset and the enable condition is met."
+      },
+      {
+        "code": "always @( posedge Clock or negedge Reset_n )\nbegin\n    if(!Reset_n)\n        W_Address <= 6'd63;\n    else if(En_In)\n        begin\n            if(W_Address == 6'd63) //If the last data is written, start writing from scratch\n                W_Address <= 6'd0;\n            else\n                W_Address <= W_Address + 6'd1; // Write in sequence 0~63\n        end\n    else\n        W_Address <= W_Address;\nend\n\n//Mem read enable control\n",
+        "description": "This code implements a synchronous address counter with reset and enable control. The counter increments on each clock edge when the enable signal is active. If the counter reaches its maximum value, it resets to zero on the next increment. The counter is reset to a specific initial value when the reset signal is active. The output of the counter is used to control memory read operations."
+      },
+      {
+        "code": "always @(posedge Clock or negedge Reset_n)\nbegin\n    if(!Reset_n)\n\t    R_En <= 1'b0;\n    else if( R_Address == 6'd63 ) //If the last bit is read\n        begin\n\t        if( (W_Address == 6'd63) && W_En) // The operation can be read when one of the ROMs is finished\n                R_En <= 1'b1;\n\t        else \n\t\t        R_En <= 1'b0;\n        end\n    else \n\t    R_En <= R_En ;\nend\n\n//Mem read control\n",
+        "description": "This code implements a synchronous control logic for enabling a read operation from a memory. The logic resets the read enable signal to 0 when the reset is active. When the read address reaches the maximum value, it checks if the write address is also at the maximum and if the write enable is active. If both conditions are met, it sets the read enable to 1, allowing the read operation. Otherwise, the read enable remains unchanged, maintaining its previous state."
+      },
+      {
+        "code": "RAM_Mem\tU0_RAM_Mem(\n\t.address ( Address_0 ),\n\t.clock ( Clock ),\n\t.data ( Cache ),\n\t.rden ( R_En_0 ),\n\t.wren ( W_En_0 ),\n\t.q ( RAM_Mem_0_Out )\n\t);\n\n//Instantiating Rem_1 modules\n",
+        "description": "This code instantiates a RAM memory module. The RAM is accessed using an address input and is controlled by read and write enable signals. When the read enable signal is active, the RAM outputs the data stored at the specified address. When the write enable signal is active, the RAM writes the input data to the specified address. The operation is synchronized with a clock signal, ensuring that read and write operations occur on the appropriate clock edges."
+      },
+      {
+        "code": "RAM_Mem\tU1_RAM_Mem(\n\t.address ( Address_1 ),\n\t.clock ( Clock ),\n\t.data ( Cache ),\n\t.rden ( R_En_1 ),\n\t.wren ( W_En_1 ),\n\t.q ( RAM_Mem_1_Out )\n\t);\n\n//Input Data Cache\n",
+        "description": "This code block instantiates a RAM memory module. It includes an address input to select the memory location, a clock signal for synchronization, and data input for writing. The module also has read and write enable signals to control when data is read from or written to the memory. The output provides the data read from the selected memory address. This setup is typically used for temporary data storage and retrieval in digital systems."
+      }
+    ],
+    "signal_descriptions": [
+      {
+        "signal": "Mem::R_Address",
+        "description": "Acts as a data register to store the current read address in a memory system. It increments synchronously with the clock when the read enable is active, and resets to zero under specific conditions. When the read address reaches its maximum value, it checks if a write operation is also at the maximum address and if a write enable is active. If both conditions are met, the read address resets to zero; otherwise, it holds its current value. The reset signal, when active, sets the read address to its maximum value. This behavior ensures proper synchronization and control of the read address in the memory system."
+      },
+      {
+        "signal": "Mem::En_Out",
+        "description": "This signal acts as a control flag to manage the activation of a specific function. It is reset to an inactive state during system initialization. When a particular control condition is met, the flag is set to an active state, enabling the associated function. The flag returns to an inactive state if the control condition is not met. This behavior ensures that the function is only activated under the correct conditions and in sync with the system's clock, maintaining proper timing and coordination."
+      },
+      {
+        "signal": "Mem::RAM_Mem_0_Out",
+        "description": "Acts as a data register to store and output the value read from a memory location. It holds the data retrieved from the RAM when the read enable signal is active, and the address is provided. The stored data is then used in a multiplexer to select between two data sources based on a control flag. If the control flag is active, the data from this register is passed to the output; otherwise, data from another source is selected."
+      },
+      {
+        "signal": "Mem::Clock",
+        "description": "Acts as a clock signal to synchronize various operations within the module. It triggers the updating of registers, counters, and control flags on its rising edge. The clock signal ensures that all state changes and data transfers occur in a coordinated manner, maintaining the correct sequence of operations. During each clock cycle, it enables the evaluation of conditions and the execution of corresponding actions, such as incrementing counters, toggling control flags, and updating memory addresses."
+      },
+      {
+        "signal": "Mem::R_En_1",
+        "description": "Acts as a control signal to manage the read operation in a memory module. When active, it enables the data retrieval from the specified memory address. This control signal is part of a larger logic block that routes and synchronizes read and write operations based on a control flag, ensuring proper data flow and address mapping in the memory or I/O interface."
+      },
+      {
+        "signal": "Mem::W_Address",
+        "description": "Acts as a data register to store the write address in a memory interface. It increments sequentially on each clock edge when an enable signal is active, wrapping around to zero after reaching the maximum value. The reset signal initializes the register to a specific value. This register controls the sequence of memory write operations, ensuring that data is written in a continuous and controlled manner."
+      },
+      {
+        "signal": "Mem::R_En_0",
+        "description": "Acts as a control signal to manage the read operation of a RAM module. It is asserted based on the state of a control flag, which determines whether the read operation should be enabled. When active, it allows the RAM to output data from the specified address. The control signal is part of a larger logic block that also handles write operations and address reordering, ensuring proper data flow and access in the memory interface."
+      },
+      {
+        "signal": "Mem::Address_0",
+        "description": "Acts as an address input for a memory module. It is generated by a combinational logic block that reorders and assigns address bits based on the state of a control flag. This address input determines the location in the memory where data will be read from or written to. The logic block also manages the read and write enable signals, which control whether the memory performs a read or write operation at the specified address. The overall behavior ensures that data flow and address mapping are managed correctly in the memory interface."
+      },
+      {
+        "signal": "Mem::RAM_Mem_1_Out",
+        "description": "Acts as a data register to store and output the data read from a specific memory location. The data is accessed based on an address input and controlled by read and write enable signals. This register is part of a RAM module that provides temporary storage and retrieval of data, which can be used in various digital system operations. The data from this register is selected and outputted when a control flag indicates it should be used over another data source."
+      },
+      {
+        "signal": "Mem::W_En_0",
+        "description": "Acts as a control signal to manage the write operation in a memory module. It is used to enable or disable the writing of data to the memory based on the state of a control flag. When the control flag is active, the signal is set to a specific value to prevent writing, and when the control flag is inactive, it allows writing by setting the signal to another value. This ensures that data is written to the memory only under the correct conditions, maintaining the integrity and proper functioning of the memory interface."
+      },
+      {
+        "signal": "Mem::W_En_1",
+        "description": "Acts as a control signal to manage the write operation in a memory module. When the control flag is active, it enables the write operation, allowing data to be stored in the specified memory address. When the control flag is inactive, it disables the write operation, preventing any data from being written. This control signal is crucial for coordinating data storage and ensuring that data is only written under the correct conditions."
+      },
+      {
+        "signal": "Mem::R_En",
+        "description": "Acts as a control signal to manage read operations from a memory. It is set to 1 when the read address reaches its maximum value and a write operation is also at the maximum address with the write enable active, allowing the read operation to proceed. Otherwise, it remains in its previous state, preventing the read operation. The control signal is reset to 0 when the system reset is active, ensuring that no read operation occurs during the reset condition."
+      },
+      {
+        "signal": "Mem::In_Data",
+        "description": "Serves as a data register to store incoming information. It captures and holds the input data on every clock cycle unless a reset condition is detected. During a reset, it initializes to a zero value. This mechanism ensures that the stored data is synchronized with the system clock and only updated when the reset is not active, maintaining data integrity and consistency in the storage process."
+      },
+      {
+        "signal": "Mem::Address_1",
+        "description": "Acts as an address input for a RAM memory module. It selects the specific memory location to be accessed during read or write operations. The address is determined by combinational logic that reorders and assigns address bits based on the state of a control flag. This address input is crucial for directing data flow and ensuring that the correct memory location is accessed, thereby facilitating proper data storage and retrieval in the memory system."
+      },
+      {
+        "signal": "Mem::Cache",
+        "description": "Acts as a data register to store and synchronize incoming data. It captures and holds the input data on the rising edge of the clock signal, ensuring that the stored value is updated only when the reset is not active. This register is used to provide stable and synchronized data to other components, such as RAM modules, where it serves as the input data for memory write operations. The register ensures that the data is consistent and correctly timed for further processing and storage."
+      },
+      {
+        "signal": "Mem::Out_Data",
+        "description": "Serves as a data path to select and output data from one of two sources based on a control flag. When the control flag is active, it routes data from the first source; otherwise, it directs data from the second source. The selection process is combinational, ensuring that the output updates immediately in response to changes in the control flag."
+      },
+      {
+        "signal": "Mem::W_En",
+        "description": "Acts as a control signal to enable memory write operations. It is activated when the system is not in reset and an input enable condition is met. This signal ensures that data is written to memory only when the system is in a valid state and the necessary conditions are satisfied. The control signal is deactivated during reset or when the input enable condition is not met, preventing unintended writes."
+      },
+      {
+        "signal": "Mem::Chip_Sele_DFF",
+        "description": "Acts as a state flag to control the selection between two data sources. The flag is updated synchronously with the clock and reset signals, defaulting to a low state during reset. In the combinatorial logic, this flag determines which of the two memory outputs is routed to the final output. If the flag is active, it selects the first memory output; otherwise, it selects the second. This mechanism ensures that the correct data source is used for further processing or output."
+      },
+      {
+        "signal": "Mem::Chip_Sele",
+        "description": "Acts as a control signal to manage the selection between two memory chips. It is set to a known state during reset and toggles when a specific address is reached and a write enable condition is met, ensuring that the memory chip selection changes only after the last bit of data is written. This control signal also influences the routing of write and read enable signals and the reordering of address bits, directing data flow and address mapping in the memory interface. A register captures this control signal on the rising edge of the clock or the falling edge of the reset, maintaining its value for use in subsequent operations."
+      },
+      {
+        "signal": "Mem::En_In",
+        "description": "This signal acts as a control flag to manage memory write and read operations. It is used to enable the write operation and increment the address counter. When the control flag is asserted, it activates the write enable signal and increments the address counter, ensuring sequential data writing. If the flag is not active, the write enable is deactivated, and the address counter holds its current value. This control mechanism ensures that memory operations are synchronized and only occur under valid conditions."
+      },
+      {
+        "signal": "Mem::Reset_n",
+        "description": "Acts as a reset signal to initialize and control the state of various components in the system. When active, it sets specific registers and control flags to known states, such as resetting address counters and disabling enable signals. This ensures that the system starts from a well-defined initial condition. During normal operation, when the reset is inactive, the system updates these components based on clock edges and other control signals, allowing for synchronized and controlled behavior."
+      }
+    ],
+    "module_description": "This code block implements a synchronous RAM memory module. It provides temporary data storage and retrieval, controlled by read and write enable signals. The memory is accessed using an address input, and the operations are synchronized with a clock signal. When the read enable is active, the module outputs the data stored at the specified address. When the write enable is active, it writes the input data to the selected address. This setup ensures that data is read from or written to the memory only on specific clock edges, maintaining data integrity and synchronization in the system."
+  }
+]

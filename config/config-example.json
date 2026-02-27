@@ -1,0 +1,44 @@
+{
+  "neo4j": {
+    "uri": "bolt://localhost:7687",
+    "username": "neo4j",
+    "password": "neo4j123"
+  },
+  "processing": {
+    "clearDatabase": true,
+    "importNetlist": false,
+    "importAST": true,
+    "importDFG": true,
+    "alignDFGToAST": true,
+    "dfgMaxNodesPerFile": 5000,
+    "dfgIncludeTempNodes": true,
+    "importParallelModules": true,
+    "importBatchSize": 200,
+    "importMaxRetries": 3,
+    "generateEmbeddings": false,
+    "skipParamod": true
+  },
+  "yosys": {
+    "workDir": "./output",
+    "includeDirs": [
+      "hdlsearch/database/verilog_database"
+    ],
+    "useSystemVerilog": true,
+    "timeoutSeconds": 120,
+    "maxRetries": 1
+  },
+  "batchProcessing": {
+    "enabled": false,
+    "listFile": "verilog_files.txt",
+    "parallel": true
+  },
+  "embeddings": {
+    "enabled": false,
+    "provider": "openai",
+    "model": "text-embedding-v4",
+    "apiKey": null,
+    "apiUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings",
+    "dimension": 1024,
+    "batchSize": 10
+  }
+}
