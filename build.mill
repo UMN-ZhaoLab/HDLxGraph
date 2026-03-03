@@ -7,8 +7,10 @@ import mill.scalalib.TestModule.ScalaTest
 import scalalib._
 
 object netlist2neo4j extends ScalaModule {
-  // Sources moved under graph_storage/netlist2neo4j
-  override def millSourcePath = os.pwd / "graph_storage" / "netlist2neo4j"
+  // Module name defaults millSourcePath to "<repo>/netlist2neo4j"; step up one level first.
+  override def millSourcePath = super.millSourcePath / os.up / "graph_storage" / "netlist2neo4j"
+  // `@main def main` in Scala 3 generates `netlist2neo4j.main` (lowercase).
+  def mainClass = Some("netlist2neo4j.main")
   def scalaVersion = "3.3.6"
   
   def ivyDeps = Agg(
